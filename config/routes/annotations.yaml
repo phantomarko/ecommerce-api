@@ -1,0 +1,3 @@
+product:
+    type: rest
+    resource: '../src/Infrastructure/Product/Resources/routes.yaml'
