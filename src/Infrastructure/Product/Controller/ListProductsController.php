@@ -10,8 +10,8 @@ class ListProductsController
     /**
      * @Get("/products")
      */
-    public function indexAction()
+    public function getProductsAction()
     {
-        return new JsonResponse(['data'=>'hola']);
+        return new JsonResponse([]);
     }
 }
