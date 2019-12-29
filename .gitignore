@@ -8,6 +8,6 @@
 /vendor/
 ###< symfony/framework-bundle ###
 
-###> docker ###
-/.docker/data
-###< docker ###
+###> phpstorm ###
+/.idea/
+###< phpstorm ###
