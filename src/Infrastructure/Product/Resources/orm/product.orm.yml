@@ -1,0 +1,21 @@
+App\Domain\Product\Model\Product:
+    type: entity
+    table: product
+    id:
+        uuid:
+            type: string
+            nullable: false
+            length: 150
+    fields:
+        name:
+            type: string
+            nullable: false
+        description:
+            type: string
+            nullable: false
+        price:
+            type: float
+            nullable: false
+        priceWithVat:
+            type: float
+            nullable: false
