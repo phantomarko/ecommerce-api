@@ -1,0 +1,5 @@
+services:
+    app.product.get_products:
+        class: App\Application\Product\Command\GetProducts\GetProductsCommandHandler
+        tags:
+            - { name: tactician.handler, typehints: true }
