@@ -24,4 +24,29 @@ class Product
         $this->price = $price;
         $this->priceWithVat = $priceWithVat;
     }
+
+    public function uuid(): string
+    {
+        return $this->uuid;
+    }
+
+    public function name(): string
+    {
+        return $this->name;
+    }
+
+    public function description(): string
+    {
+        return $this->description;
+    }
+
+    public function price(): float
+    {
+        return $this->price;
+    }
+
+    public function priceWithVat(): float
+    {
+        return $this->priceWithVat;
+    }
 }

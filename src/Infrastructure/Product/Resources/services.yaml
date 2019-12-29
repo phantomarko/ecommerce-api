@@ -1,5 +1,16 @@
 services:
-    app.product.get_products:
+    app.product.service.product_to_array:
+        class: 'App\Application\Product\Service\ProductToArrayConverter'
+
+    app.product.command.get_products:
         class: App\Application\Product\Command\GetProducts\GetProductsCommandHandler
         tags:
             - { name: tactician.handler, typehints: true }
+        arguments:
+            - '@app.product.repository.doctrine'
+            - '@app.product.service.product_to_array'
+
+    app.product.repository.doctrine:
+        class: App\Infrastructure\Product\Repository\DoctrineProductRepository
+        arguments:
+            - '@Doctrine\Persistence\ManagerRegistry'
