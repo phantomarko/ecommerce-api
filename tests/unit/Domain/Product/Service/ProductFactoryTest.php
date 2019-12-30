@@ -2,6 +2,7 @@
 
 namespace App\Tests\unit\Domain\Product\Service;
 
+use App\Domain\Common\Service\UuidGeneratorInterface;
 use App\Domain\Product\Model\Product;
 use App\Domain\Product\Repository\ProductRepositoryInterface;
 use App\Domain\Product\Service\ProductFactory;
@@ -16,7 +17,9 @@ class ProductFactoryTest extends TestCase
         $description = 'description';
         $price = 100;
         $priceWithVat = 121;
-        $productFactory = new ProductFactory($productRepository->reveal());
+        $uuidGenerator = $this->prophesize(UuidGeneratorInterface::class);
+        $uuidGenerator->generate()->willReturn('uuid');
+        $productFactory = new ProductFactory($productRepository->reveal(), $uuidGenerator->reveal());
 
         $product = $productFactory->createProduct(
             $name,

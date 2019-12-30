@@ -6,6 +6,7 @@ services:
         class: App\Domain\Product\Service\ProductFactory
         arguments:
             - '@app.product.repository.doctrine'
+            - '@app.common.service.ramsey_uuid_generator'
 
     app.product.command.get_products:
         class: App\Application\Product\Command\GetProducts\GetProductsCommandHandler
