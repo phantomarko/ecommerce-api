@@ -30,7 +30,7 @@ class ProductToArrayConverterTest extends TestCase
         $product->priceWithVat()->willReturn($priceWithVat);
 
         $array = $this->productToArrayConverter->toArray($product->reveal());
-        
+
         $this->assertIsArray($array);
         $this->assertArrayHasKey('uuid', $array);
         $this->assertSame($array['uuid'], $uuid);
