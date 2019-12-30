@@ -1,3 +1,7 @@
 list_products:
     type: rest
     resource: App\Infrastructure\Product\Controller\ListProductsController
+
+create_product:
+    type: rest
+    resource: App\Infrastructure\Product\Controller\CreateProductController

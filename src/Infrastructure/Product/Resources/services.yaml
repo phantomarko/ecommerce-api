@@ -10,6 +10,11 @@ services:
             - '@app.product.repository.doctrine'
             - '@app.product.service.product_to_array'
 
+    app.product.command.create_product:
+        class: App\Application\Product\Command\CreateProduct\CreateProductCommandHandler
+        tags:
+            - { name: tactician.handler, typehints: true }
+
     app.product.repository.doctrine:
         class: App\Infrastructure\Product\Repository\DoctrineProductRepository
         arguments:
