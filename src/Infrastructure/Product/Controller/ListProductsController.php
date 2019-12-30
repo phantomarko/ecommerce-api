@@ -14,6 +14,7 @@ class ListProductsController extends AbstractController
      */
     public function getProductsAction()
     {
+        // TODO Add request
         $products = $this->commandBus->handle(new GetProductsCommand());
         return new JsonResponse($products);
     }

@@ -2,6 +2,11 @@ services:
     app.product.service.product_to_array:
         class: 'App\Application\Product\Service\ProductToArrayConverter'
 
+    app.product.service.product_factory:
+        class: App\Domain\Product\Service\ProductFactory
+        arguments:
+            - '@app.product.repository.doctrine'
+
     app.product.command.get_products:
         class: App\Application\Product\Command\GetProducts\GetProductsCommandHandler
         tags:
@@ -14,6 +19,9 @@ services:
         class: App\Application\Product\Command\CreateProduct\CreateProductCommandHandler
         tags:
             - { name: tactician.handler, typehints: true }
+        arguments:
+            - '@app.product.service.product_factory'
+            - '@app.product.service.product_to_array'
 
     app.product.repository.doctrine:
         class: App\Infrastructure\Product\Repository\DoctrineProductRepository

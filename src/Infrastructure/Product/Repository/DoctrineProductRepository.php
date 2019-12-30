@@ -14,6 +14,11 @@ class DoctrineProductRepository extends ServiceEntityRepository implements Produ
         parent::__construct($managerRegistry, Product::class);
     }
 
+    public function add(Product $product): void
+    {
+        $this->_em->persist($product);
+    }
+
     public function findAll(): array
     {
         return parent::findAll();

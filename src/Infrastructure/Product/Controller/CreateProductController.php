@@ -15,6 +15,7 @@ class CreateProductController extends AbstractController
      */
     public function postCreateProductAction()
     {
+        // TODO Add request to endpoint
         $product = $this->commandBus->handle(new CreateProductCommand());
         return new JsonResponse($product, Response::HTTP_CREATED);
     }

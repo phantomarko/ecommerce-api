@@ -21,6 +21,7 @@ class GetProductsCommandHandler
 
     public function handle(GetProductsCommand $command)
     {
+        // TODO Get command props and use filter repository function
         return array_map(function ($product) {
             return $this->productToArrayConverter->toArray($product);
         }, $this->productRepository->findAll());
