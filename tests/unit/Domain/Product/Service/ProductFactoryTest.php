@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\unit\Domain\Product;
+namespace App\Tests\unit\Domain\Product\Service;
 
 use App\Domain\Product\Model\Product;
 use App\Domain\Product\Repository\ProductRepositoryInterface;
