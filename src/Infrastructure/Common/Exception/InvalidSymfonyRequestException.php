@@ -2,7 +2,7 @@
 
 namespace App\Infrastructure\Common\Exception;
 
-class InvalidJsonRequestException extends \Exception
+class InvalidSymfonyRequestException extends \Exception
 {
     public function __construct()
     {
