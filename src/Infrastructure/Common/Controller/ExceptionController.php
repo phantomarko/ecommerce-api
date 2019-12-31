@@ -14,13 +14,13 @@ class ExceptionController
     public function showAction(Request $request, $exception, DebugLoggerInterface $logger = null)
     {
         if ($exception instanceof FlattenException) {
-            $data = $exception->getMessage();
+            $error = $exception->getMessage();
             $code = Response::HTTP_BAD_REQUEST;
         } else {
-            $data = $exception->getMessage();
+            $error = $exception->getMessage();
             $code = Response::HTTP_INTERNAL_SERVER_ERROR;
         }
 
-        return new JsonResponse($data, $code);
+        return new JsonResponse(['message' => $error], $code);
     }
 }
