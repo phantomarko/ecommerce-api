@@ -19,3 +19,10 @@ App\Domain\Product\Model\Product:
         priceWithVat:
             type: float
             nullable: false
+    manyToOne:
+        taxonomy:
+            targetEntity: App\Domain\Taxonomy\Model\Taxonomy
+            joinColumn:
+                name: taxonomy_id
+                referencedColumnName: uuid
+                nullable: true

@@ -2,6 +2,8 @@
 
 namespace App\Domain\Product\Model;
 
+use App\Domain\Taxonomy\Model\Taxonomy;
+
 class Product
 {
     private $uuid;
@@ -9,13 +11,15 @@ class Product
     private $description;
     private $price;
     private $priceWithVat;
+    private $taxonomy;
 
     public function __construct(
         string $uuid,
         string $name,
         string $description,
         float $price,
-        float $priceWithVat
+        float $priceWithVat,
+        ?Taxonomy $taxonomy
     )
     {
         $this->uuid = $uuid;
@@ -23,6 +27,7 @@ class Product
         $this->description = $description;
         $this->price = $price;
         $this->priceWithVat = $priceWithVat;
+        $this->taxonomy = $taxonomy;
     }
 
     public function uuid(): string
@@ -48,5 +53,10 @@ class Product
     public function priceWithVat(): float
     {
         return $this->priceWithVat;
+    }
+
+    public function taxonomyName(): ?string
+    {
+        return $this->taxonomy ? $this->taxonomy->name() : null;
     }
 }

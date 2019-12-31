@@ -1,0 +1,12 @@
+App\Domain\Taxonomy\Model\Taxonomy:
+    type: entity
+    table: taxonomy
+    id:
+        uuid:
+            type: string
+            nullable: false
+            length: 150
+    fields:
+        name:
+            type: string
+            nullable: false

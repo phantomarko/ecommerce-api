@@ -14,6 +14,7 @@ class ProductToArrayConverter
             'description' => $product->description(),
             'price' => $product->price(),
             'priceWithVat' => $product->priceWithVat(),
+            'taxonomyName' => $product->taxonomyName()
         ];
     }
 }

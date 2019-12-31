@@ -24,7 +24,8 @@ class ProductFactoryTest extends TestCase
         $product = $productFactory->createProduct(
             $name,
             $description,
-            $price
+            $price,
+            null
         );
 
         $this->assertInstanceOf(Product::class, $product);
@@ -33,5 +34,6 @@ class ProductFactoryTest extends TestCase
         $this->assertSame($product->description(), $description);
         $this->assertSame($product->price(), floatval($price));
         $this->assertSame($product->priceWithVat(), floatval($priceWithVat));
+        $this->assertEmpty($product->taxonomyName());
     }
 }

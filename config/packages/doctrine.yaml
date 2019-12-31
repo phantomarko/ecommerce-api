@@ -16,4 +16,8 @@ doctrine:
                 type: yml
                 dir: '%kernel.project_dir%/src/Infrastructure/Product/resources/orm'
                 prefix: 'App\Domain\Product\Model'
-                alias: App
+            taxonomy:
+                is_bundle: false
+                type: yml
+                dir: '%kernel.project_dir%/src/Infrastructure/Taxonomy/resources/orm'
+                prefix: 'App\Domain\Taxonomy\Model'

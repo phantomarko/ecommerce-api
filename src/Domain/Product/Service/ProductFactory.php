@@ -5,6 +5,7 @@ namespace App\Domain\Product\Service;
 use App\Domain\Common\Service\UuidGeneratorInterface;
 use App\Domain\Product\Model\Product;
 use App\Domain\Product\Repository\ProductRepositoryInterface;
+use App\Domain\Taxonomy\Model\Taxonomy;
 
 class ProductFactory
 {
@@ -23,7 +24,8 @@ class ProductFactory
     public function createProduct(
         string $name,
         string $description,
-        float $price
+        float $price,
+        ?Taxonomy $taxonomy
     ): Product
     {
         $product = new Product(
@@ -31,7 +33,8 @@ class ProductFactory
             $name,
             $description,
             $price,
-            $price + ($price * 0.21)
+            $price + ($price * 0.21),
+            $taxonomy
         );
         $this->productRepository->add($product);
 

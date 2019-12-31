@@ -3,6 +3,7 @@
 namespace App\Tests\unit\Domain\Product\Model;
 
 use App\Domain\Product\Model\Product;
+use App\Domain\Taxonomy\Model\Taxonomy;
 use PHPUnit\Framework\TestCase;
 
 class ProductTest extends TestCase
@@ -12,6 +13,8 @@ class ProductTest extends TestCase
     private $description;
     private $price;
     private $priceWithVat;
+    private $taxonomyName;
+    private $taxonomy;
     private $product;
 
     public function setUp()
@@ -21,13 +24,17 @@ class ProductTest extends TestCase
         $this->description = 'description';
         $this->price = 2.88;
         $this->priceWithVat = 288.88;
+        $this->taxonomyName = 'taxonomy';
+        $this->taxonomy = $this->prophesize(Taxonomy::class);
+        $this->taxonomy->name()->willReturn($this->taxonomyName);
 
         $this->product = new Product(
             $this->uuid,
             $this->name,
             $this->description,
             $this->price,
-            $this->priceWithVat
+            $this->priceWithVat,
+            $this->taxonomy->reveal()
         );
     }
 
@@ -54,5 +61,23 @@ class ProductTest extends TestCase
     public function testPriceWithVat()
     {
         $this->assertSame($this->product->priceWithVat(), $this->priceWithVat);
+    }
+
+    public function testTaxonomyName()
+    {
+        $this->assertSame($this->product->taxonomyName(), $this->taxonomyName);
+    }
+
+    public function testEmptyTaxonomyName()
+    {
+        $product = new Product(
+            $this->uuid,
+            $this->name,
+            $this->description,
+            $this->price,
+            $this->priceWithVat,
+            null
+        );
+        $this->assertEmpty($product->taxonomyName());
     }
 }

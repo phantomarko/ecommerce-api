@@ -28,6 +28,8 @@ class ProductToArrayConverterTest extends TestCase
         $product->price()->willReturn($price);
         $priceWithVat = 288.8;
         $product->priceWithVat()->willReturn($priceWithVat);
+        $taxonomyName = 'taxonomy';
+        $product->taxonomyName()->willReturn($taxonomyName);
 
         $array = $this->productToArrayConverter->toArray($product->reveal());
 
@@ -42,5 +44,7 @@ class ProductToArrayConverterTest extends TestCase
         $this->assertSame($array['price'], $price);
         $this->assertArrayHasKey('priceWithVat', $array);
         $this->assertSame($array['priceWithVat'], $priceWithVat);
+        $this->assertArrayHasKey('taxonomyName', $array);
+        $this->assertSame($array['taxonomyName'], $taxonomyName);
     }
 }
