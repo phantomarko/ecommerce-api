@@ -6,7 +6,7 @@ use App\Application\Product\Command\GetProducts\GetProductsCommand;
 use App\Infrastructure\Common\Exception\InvalidSymfonyRequestException;
 use Symfony\Component\HttpFoundation\Request;
 
-class SymfonyRequestToGetProductsCommand
+class SymfonyRequestToGetProductsCommandConverter
 {
     public function convert(Request $request): GetProductsCommand
     {

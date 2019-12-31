@@ -3,7 +3,7 @@
 namespace App\Infrastructure\Product\Controller;
 
 use App\Infrastructure\Common\Controller\AbstractController;
-use App\Infrastructure\Product\Service\SymfonyRequestToCreateProductCommand;
+use App\Infrastructure\Product\Service\SymfonyRequestToCreateProductCommandConverter;
 use FOS\RestBundle\Controller\Annotations\Post;
 use League\Tactician\CommandBus;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -12,15 +12,15 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CreateProductController extends AbstractController
 {
-    private $requestToCreateProductCommand;
+    private $requestToCommandConverter;
 
     public function __construct(
         CommandBus $commandBus,
-        SymfonyRequestToCreateProductCommand $requestToCreateProductCommand
+        SymfonyRequestToCreateProductCommandConverter $symfonyRequestToCreateProductCommandConverter
     )
     {
         parent::__construct($commandBus);
-        $this->requestToCreateProductCommand = $requestToCreateProductCommand;
+        $this->requestToCommandConverter = $symfonyRequestToCreateProductCommandConverter;
     }
 
     /**
@@ -28,7 +28,7 @@ class CreateProductController extends AbstractController
      */
     public function postCreateProductAction(Request $request)
     {
-        $command = $this->requestToCreateProductCommand->convert($request);
+        $command = $this->requestToCommandConverter->convert($request);
         $product = $this->commandBus->handle($command);
 
         return new JsonResponse($product, Response::HTTP_CREATED);

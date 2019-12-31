@@ -3,7 +3,7 @@
 namespace App\Infrastructure\Product\Controller;
 
 use App\Infrastructure\Common\Controller\AbstractController;
-use App\Infrastructure\Product\Service\SymfonyRequestToGetProductsCommand;
+use App\Infrastructure\Product\Service\SymfonyRequestToGetProductsCommandConverter;
 use FOS\RestBundle\Controller\Annotations\Get;
 use League\Tactician\CommandBus;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -11,15 +11,15 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ListProductsController extends AbstractController
 {
-    private $requestToGetProductsCommand;
+    private $requestToCommandConverter;
 
     public function __construct(
         CommandBus $commandBus,
-        SymfonyRequestToGetProductsCommand $requestToGetProductsCommand
+        SymfonyRequestToGetProductsCommandConverter $symfonyRequestToGetProductsCommandConverter
     )
     {
         parent::__construct($commandBus);
-        $this->requestToGetProductsCommand = $requestToGetProductsCommand;
+        $this->requestToCommandConverter = $symfonyRequestToGetProductsCommandConverter;
     }
 
     /**
@@ -27,7 +27,7 @@ class ListProductsController extends AbstractController
      */
     public function getProductsAction(Request $request)
     {
-        $command = $this->requestToGetProductsCommand->convert($request);
+        $command = $this->requestToCommandConverter->convert($request);
         $products = $this->commandBus->handle($command);
         return new JsonResponse($products);
     }
