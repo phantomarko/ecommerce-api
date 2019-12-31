@@ -7,6 +7,7 @@ services:
         arguments:
             - '@app.product.repository.doctrine'
             - '@app.common.service.ramsey_uuid_generator'
+            - '@app.taxonomy.repository.doctrine'
 
     app.product.command.get_products:
         class: App\Application\Product\Command\GetProducts\GetProductsCommandHandler
@@ -24,7 +25,6 @@ services:
         arguments:
             - '@app.product.service.product_factory'
             - '@app.product.service.product_to_array'
-            - '@app.taxonomy.repository.doctrine'
 
     app.product.repository.doctrine:
         class: App\Infrastructure\Product\Repository\DoctrineProductRepository

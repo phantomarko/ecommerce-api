@@ -16,13 +16,11 @@ class CreateProductCommandHandlerTest extends TestCase
 {
     private $productFactory;
     private $productToArrayConverter;
-    private $taxonomyRepository;
 
     public function setUp()
     {
         $this->productFactory = $this->prophesize(ProductFactory::class);
         $this->productToArrayConverter = $this->prophesize(ProductToArrayConverter::class);
-        $this->taxonomyRepository = $this->prophesize(TaxonomyRepositoryInterface::class);
     }
 
     public function testHandle()
@@ -37,15 +35,12 @@ class CreateProductCommandHandlerTest extends TestCase
         $taxonomyUuid = 'uuid';
         $command->taxonomyUuid()->willReturn($taxonomyUuid);
 
-        $taxonomy = $this->prophesize(Taxonomy::class);
-        $this->taxonomyRepository->findOneByUuid($taxonomyUuid)->willReturn($taxonomy->reveal());
-
         $product = $this->prophesize(Product::class);
         $this->productFactory->createProduct(
             $name,
             $description,
             $price,
-            $taxonomy->reveal()
+            $taxonomyUuid
         )->willReturn($product->reveal());
 
         $this->productToArrayConverter->toArray($product->reveal())->willReturn([
@@ -59,8 +54,7 @@ class CreateProductCommandHandlerTest extends TestCase
 
         $handler = new CreateProductCommandHandler(
             $this->productFactory->reveal(),
-            $this->productToArrayConverter->reveal(),
-            $this->taxonomyRepository->reveal()
+            $this->productToArrayConverter->reveal()
         );
 
         $productArray = $handler->handle($command->reveal());
@@ -109,8 +103,7 @@ class CreateProductCommandHandlerTest extends TestCase
 
         $handler = new CreateProductCommandHandler(
             $this->productFactory->reveal(),
-            $this->productToArrayConverter->reveal(),
-            $this->taxonomyRepository->reveal()
+            $this->productToArrayConverter->reveal()
         );
 
         $productArray = $handler->handle($command->reveal());
@@ -127,29 +120,5 @@ class CreateProductCommandHandlerTest extends TestCase
         $this->assertArrayHasKey('priceWithVat', $productArray);
         $this->assertNotEmpty($productArray['priceWithVat']);
         $this->assertArrayNotHasKey('taxonomyName', $productArray);
-    }
-
-    public function testHandleThrowsResourceNotFoundException()
-    {
-        $command = $this->prophesize(CreateProductCommand::class);
-        $name = 'name';
-        $command->name()->willReturn($name);
-        $description = 'description';
-        $command->description()->willReturn($description);
-        $price = 100;
-        $command->price()->willReturn($price);
-        $taxonomyUuid = 'uuid';
-        $command->taxonomyUuid()->willReturn($taxonomyUuid);
-
-        $this->taxonomyRepository->findOneByUuid($taxonomyUuid)->willReturn(null);
-
-        $handler = new CreateProductCommandHandler(
-            $this->productFactory->reveal(),
-            $this->productToArrayConverter->reveal(),
-            $this->taxonomyRepository->reveal()
-        );
-
-        $this->expectException(ResourceNotFoundException::class);
-        $handler->handle($command->reveal());
     }
 }
