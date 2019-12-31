@@ -31,6 +31,7 @@ class SymfonyRequestToCreateProductCommand
             !empty($request['name'])
             && !empty($request['description'])
             && !empty($request['price'])
+            && is_numeric($request['price'])
         );
     }
 }
