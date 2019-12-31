@@ -4,6 +4,7 @@ namespace App\Infrastructure\Product\Repository;
 
 use App\Domain\Product\Model\Product;
 use App\Domain\Product\Repository\ProductRepositoryInterface;
+use App\Domain\Taxonomy\Model\Taxonomy;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,7 +20,12 @@ class DoctrineProductRepository extends ServiceEntityRepository implements Produ
         $this->_em->persist($product);
     }
 
-    public function findAll(): array
+    public function findByFilters(
+        ?Taxonomy $taxonomy,
+        ?float $minimumPrice,
+        ?float $maximumPrice,
+        ?string $text
+    ): array
     {
         return parent::findAll();
     }

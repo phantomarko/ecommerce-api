@@ -15,6 +15,7 @@ services:
         arguments:
             - '@app.product.repository.doctrine'
             - '@app.product.service.product_to_array'
+            - '@app.taxonomy.repository.doctrine'
 
     app.product.command.create_product:
         class: App\Application\Product\Command\CreateProduct\CreateProductCommandHandler
