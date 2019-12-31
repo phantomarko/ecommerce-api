@@ -1,0 +1,5 @@
+services:
+    app.taxonomy.repository.doctrine:
+        class: App\Infrastructure\Taxonomy\Repository\DoctrineTaxonomyRepository
+        arguments:
+            - '@Doctrine\Persistence\ManagerRegistry'

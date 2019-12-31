@@ -23,6 +23,7 @@ services:
         arguments:
             - '@app.product.service.product_factory'
             - '@app.product.service.product_to_array'
+            - '@app.taxonomy.repository.doctrine'
 
     app.product.repository.doctrine:
         class: App\Infrastructure\Product\Repository\DoctrineProductRepository

@@ -6,11 +6,9 @@ fos_rest:
         default_format: json
 #    view:
 #        view_response_listener:  true
-#    exception:
-#        codes:
-#            App\Exception\MyException: 403
-#        messages:
-#            App\Exception\MyException: Forbidden area.
+    exception:
+        enabled: true
+        exception_controller: 'App\Infrastructure\Common\Controller\ExceptionController::showAction'
 #    format_listener:
 #        rules:
 #            - { path: ^/api, prefer_extension: true, fallback_format: json, priorities: [ json, html ] }
