@@ -3,8 +3,7 @@
 namespace App\Application\Product\Command\CreateProduct;
 
 use App\Application\Common\Exception\ResourceNotFoundException;
-use App\Application\Product\Service\ProductToArrayConverter;
-use App\Domain\Product\Repository\ProductRepositoryInterface;
+use App\Application\Product\Service\ProductToArrayConverter;;
 use App\Domain\Product\Service\ProductFactory;
 use App\Domain\Taxonomy\Model\Taxonomy;
 use App\Domain\Taxonomy\Repository\TaxonomyRepositoryInterface;
@@ -28,12 +27,11 @@ class CreateProductCommandHandler
 
     public function handle(CreateProductCommand $command)
     {
-        // TODO set parameters form $command
         $product = $this->productFactory->createProduct(
-            'iPhone Xs',
-            'iPhone Xs 64GB Space Gray',
-            799.99,
-            $this->getTaxonomyByUuid('656853f2-2b9a-11ea-b9eb-080027c2e88e')
+            $command->name(),
+            $command->description(),
+            $command->price(),
+            $this->getTaxonomyByUuid($command->taxonomyUuid())
         );
         return $this->productToArrayConverter->toArray($product);
     }
