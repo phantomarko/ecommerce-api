@@ -27,6 +27,32 @@ class DoctrineProductRepository extends ServiceEntityRepository implements Produ
         ?string $text
     ): array
     {
-        return parent::findAll();
+        $queryBuilder = $this->createQueryBuilder('p');
+        if ($taxonomy) {
+            $queryBuilder
+                ->andWhere($queryBuilder->expr()->eq('p.taxonomy', ':taxonomy'))
+                ->setParameter('taxonomy', $taxonomy->uuid());
+        }
+        if ($minimumPrice) {
+            $queryBuilder
+                ->andWhere($queryBuilder->expr()->gte('p.price', ':minimumPrice'))
+                ->setParameter('minimumPrice', $minimumPrice);
+        }
+        if ($maximumPrice) {
+            $queryBuilder
+                ->andWhere($queryBuilder->expr()->lte('p.price', ':maximumPrice'))
+                ->setParameter('maximumPrice', $maximumPrice);
+        }
+        if ($text) {
+            $queryBuilder
+                ->andWhere($queryBuilder->expr()->orX(
+                    $queryBuilder->expr()->like('p.name', ':name'),
+                    $queryBuilder->expr()->like('p.description', ':description')
+                ))
+                ->setParameter('name', '%' . addcslashes($text, '%_') . '%')
+                ->setParameter('description', '%' . addcslashes($text, '%_') . '%');
+        }
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }

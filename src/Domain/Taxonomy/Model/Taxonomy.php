@@ -13,6 +13,11 @@ class Taxonomy
         $this->name = $name;
     }
 
+    public function uuid(): string
+    {
+        return $this->uuid;
+    }
+
     public function name(): string
     {
         return $this->name;

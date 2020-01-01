@@ -27,14 +27,16 @@ class GetProductsCommandHandler
 
     public function handle(GetProductsCommand $command)
     {
-        return array_map(function ($product) {
-            return $this->productToArrayConverter->toArray($product);
-        }, $this->productRepository->findByFilters(
+        $products = $this->productRepository->findByFilters(
             $this->getTaxonomyByUuid($command->taxonomyUuid()),
             $command->minimumPrice(),
             $command->maximumPrice(),
             $command->text()
-        ));
+        );
+
+        return array_map(function ($product) {
+            return $this->productToArrayConverter->toArray($product);
+        }, $products);
     }
 
     private function getTaxonomyByUuid(?string $uuid): ?Taxonomy

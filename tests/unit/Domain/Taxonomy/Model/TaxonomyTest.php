@@ -7,12 +7,24 @@ use PHPUnit\Framework\TestCase;
 
 class TaxonomyTest extends TestCase
 {
+    private $uuid;
+    private $name;
+    private $taxonomy;
+
+    public function setUp()
+    {
+        $this->uuid = 'uuid';
+        $this->name = 'name';
+        $this->taxonomy = new Taxonomy($this->uuid, $this->name);
+    }
+
+    public function testUuid()
+    {
+        $this->assertSame($this->taxonomy->uuid(), $this->uuid);
+    }
+
     public function testName()
     {
-        $uuid = 'uuid';
-        $name = 'name';
-        $taxonomy = new Taxonomy($uuid, $name);
-
-        $this->assertSame($taxonomy->name(), $name);
+        $this->assertSame($this->taxonomy->name(), $this->name);
     }
 }
