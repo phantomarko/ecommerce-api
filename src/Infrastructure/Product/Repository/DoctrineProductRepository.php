@@ -2,11 +2,13 @@
 
 namespace App\Infrastructure\Product\Repository;
 
+use App\Domain\Common\Repository\PaginatedResult;
 use App\Domain\Common\Repository\Pagination;
 use App\Domain\Product\Model\Product;
 use App\Domain\Product\Repository\ProductFilters;
 use App\Domain\Product\Repository\ProductRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 class DoctrineProductRepository extends ServiceEntityRepository implements ProductRepositoryInterface
@@ -21,7 +23,7 @@ class DoctrineProductRepository extends ServiceEntityRepository implements Produ
         $this->_em->persist($product);
     }
 
-    public function findPaginatedByFilters(ProductFilters $filters, Pagination $pagination): array
+    public function findPaginatedByFilters(ProductFilters $filters, Pagination $pagination): PaginatedResult
     {
         $queryBuilder = $this->createQueryBuilder('p');
         if ($filters->taxonomy()) {
@@ -52,6 +54,14 @@ class DoctrineProductRepository extends ServiceEntityRepository implements Produ
         $queryBuilder->setFirstResult(($pagination->page() - 1) * $pagination->itemsPerPage());
         $queryBuilder->setMaxResults($pagination->itemsPerPage());
 
-        return $queryBuilder->getQuery()->getResult();
+        $query = $queryBuilder->getQuery();
+        $paginator = new Paginator($query);
+
+        return new PaginatedResult(
+            $pagination->page(),
+            $pagination->itemsPerPage(),
+            $paginator->count(),
+            $query->getResult()
+        );
     }
 }

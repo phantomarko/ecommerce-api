@@ -32,10 +32,10 @@ class GetProductsCommandHandler
     {
         $filters = $this->commandToProductFiltersConverter->convert($command);
         $pagination = $this->commandToPaginationConverter->convert($command);
-        $products = $this->productRepository->findPaginatedByFilters($filters, $pagination);
+        $productsPaginated = $this->productRepository->findPaginatedByFilters($filters, $pagination);
 
         return array_map(function ($product) {
             return $this->productToArrayConverter->toArray($product);
-        }, $products);
+        }, $productsPaginated->items());
     }
 }
