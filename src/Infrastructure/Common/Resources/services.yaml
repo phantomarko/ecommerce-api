@@ -1,3 +1,6 @@
 services:
     app.ramsey_uuid_generator:
         class: 'App\Infrastructure\Common\Service\RamseyUuidGenerator'
+
+    app.paginator_factory:
+        class: 'App\Domain\Common\Service\PaginationFactory'

@@ -7,6 +7,11 @@ services:
         arguments:
             - '@app.doctrine_taxonomy_repository'
 
+    app.get_products_command_to_pagination_converter:
+        class: 'App\Application\Product\Service\GetProductsCommandToPaginationConverter'
+        arguments:
+            - '@app.paginator_factory'
+
     app.product_factory:
         class: App\Domain\Product\Service\ProductFactory
         arguments:
@@ -22,6 +27,7 @@ services:
             - '@app.doctrine_product_repository'
             - '@app.product_to_array_converter'
             - '@app.get_products_command_to_product_filters_converter'
+            - '@app.get_products_command_to_pagination_converter'
 
     app.create_product_command_handler:
         class: App\Application\Product\Command\CreateProduct\CreateProductCommandHandler

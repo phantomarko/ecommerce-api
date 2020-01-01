@@ -2,6 +2,7 @@
 
 namespace App\Infrastructure\Product\Repository;
 
+use App\Domain\Common\Repository\Pagination;
 use App\Domain\Product\Model\Product;
 use App\Domain\Product\Repository\ProductFilters;
 use App\Domain\Product\Repository\ProductRepositoryInterface;
@@ -20,7 +21,7 @@ class DoctrineProductRepository extends ServiceEntityRepository implements Produ
         $this->_em->persist($product);
     }
 
-    public function findByFilters(ProductFilters $filters): array
+    public function findPaginatedByFilters(ProductFilters $filters, Pagination $pagination): array
     {
         $queryBuilder = $this->createQueryBuilder('p');
         if ($filters->taxonomy()) {
