@@ -3,8 +3,8 @@
 namespace App\Infrastructure\Product\Repository;
 
 use App\Domain\Product\Model\Product;
+use App\Domain\Product\Repository\ProductFilters;
 use App\Domain\Product\Repository\ProductRepositoryInterface;
-use App\Domain\Taxonomy\Model\Taxonomy;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -20,37 +20,32 @@ class DoctrineProductRepository extends ServiceEntityRepository implements Produ
         $this->_em->persist($product);
     }
 
-    public function findByFilters(
-        ?Taxonomy $taxonomy,
-        ?float $minimumPrice,
-        ?float $maximumPrice,
-        ?string $text
-    ): array
+    public function findByFilters(ProductFilters $filters): array
     {
         $queryBuilder = $this->createQueryBuilder('p');
-        if ($taxonomy) {
+        if ($filters->taxonomy()) {
             $queryBuilder
                 ->andWhere($queryBuilder->expr()->eq('p.taxonomy', ':taxonomy'))
-                ->setParameter('taxonomy', $taxonomy->uuid());
+                ->setParameter('taxonomy', $filters->taxonomy()->uuid());
         }
-        if ($minimumPrice) {
+        if ($filters->minimumPrice()) {
             $queryBuilder
                 ->andWhere($queryBuilder->expr()->gte('p.price', ':minimumPrice'))
-                ->setParameter('minimumPrice', $minimumPrice);
+                ->setParameter('minimumPrice', $filters->minimumPrice());
         }
-        if ($maximumPrice) {
+        if ($filters->maximumPrice()) {
             $queryBuilder
                 ->andWhere($queryBuilder->expr()->lte('p.price', ':maximumPrice'))
-                ->setParameter('maximumPrice', $maximumPrice);
+                ->setParameter('maximumPrice', $filters->maximumPrice());
         }
-        if ($text) {
+        if ($filters->text()) {
             $queryBuilder
                 ->andWhere($queryBuilder->expr()->orX(
                     $queryBuilder->expr()->like('p.name', ':name'),
                     $queryBuilder->expr()->like('p.description', ':description')
                 ))
-                ->setParameter('name', '%' . addcslashes($text, '%_') . '%')
-                ->setParameter('description', '%' . addcslashes($text, '%_') . '%');
+                ->setParameter('name', '%' . addcslashes($filters->text(), '%_') . '%')
+                ->setParameter('description', '%' . addcslashes($filters->text(), '%_') . '%');
         }
 
         return $queryBuilder->getQuery()->getResult();

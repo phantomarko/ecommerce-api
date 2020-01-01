@@ -4,6 +4,7 @@ namespace App\Application\Product\Command\GetProducts;
 
 use App\Application\Common\Exception\ResourceNotFoundException;
 use App\Application\Product\Service\ProductToArrayConverter;
+use App\Domain\Product\Repository\ProductFilters;
 use App\Domain\Product\Repository\ProductRepositoryInterface;
 use App\Domain\Taxonomy\Model\Taxonomy;
 use App\Domain\Taxonomy\Repository\TaxonomyRepositoryInterface;
@@ -27,12 +28,13 @@ class GetProductsCommandHandler
 
     public function handle(GetProductsCommand $command)
     {
-        $products = $this->productRepository->findByFilters(
+        $filters = new ProductFilters(
             $this->getTaxonomyByUuid($command->taxonomyUuid()),
             $command->minimumPrice(),
             $command->maximumPrice(),
             $command->text()
         );
+        $products = $this->productRepository->findByFilters($filters);
 
         return array_map(function ($product) {
             return $this->productToArrayConverter->toArray($product);
