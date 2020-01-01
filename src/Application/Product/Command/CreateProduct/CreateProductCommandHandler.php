@@ -27,6 +27,6 @@ class CreateProductCommandHandler
             $command->price(),
             $command->taxonomyUuid()
         );
-        return $this->productToArrayConverter->toArray($product);
+        return $this->productToArrayConverter->convert($product);
     }
 }

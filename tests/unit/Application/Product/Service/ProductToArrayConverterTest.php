@@ -31,7 +31,7 @@ class ProductToArrayConverterTest extends TestCase
         $taxonomyName = 'taxonomy';
         $product->taxonomyName()->willReturn($taxonomyName);
 
-        $array = $this->productToArrayConverter->toArray($product->reveal());
+        $array = $this->productToArrayConverter->convert($product->reveal());
 
         $this->assertIsArray($array);
         $this->assertArrayHasKey('uuid', $array);

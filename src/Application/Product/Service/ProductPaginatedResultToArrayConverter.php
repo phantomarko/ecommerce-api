@@ -20,7 +20,7 @@ class ProductPaginatedResultToArrayConverter
             'itemsPerPage' => $paginatedResult->itemsPerPage(),
             'totalItems' => $paginatedResult->totalItems(),
             'items' => array_map(function ($product) {
-                return $this->converter->toArray($product);
+                return $this->converter->convert($product);
             }, $paginatedResult->items())
         ];
     }

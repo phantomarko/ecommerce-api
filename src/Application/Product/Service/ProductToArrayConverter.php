@@ -6,7 +6,7 @@ use App\Domain\Product\Model\Product;
 
 class ProductToArrayConverter
 {
-    public function toArray(Product $product): array
+    public function convert(Product $product): array
     {
         return [
             'uuid' => $product->uuid(),

@@ -33,7 +33,7 @@ class CreateProductCommandHandlerTest extends TestCase
         )->willReturn($product->reveal());
 
         $productToArrayConverter = $this->prophesize(ProductToArrayConverter::class);
-        $productToArrayConverter->toArray($product->reveal())->willReturn([
+        $productToArrayConverter->convert($product->reveal())->willReturn([
             'uuid' => 'uuid',
             'name' => $name,
             'description' => $description,
