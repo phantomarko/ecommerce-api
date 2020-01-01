@@ -2,16 +2,15 @@
 
 namespace App\Infrastructure\Common\Controller;
 
-use App\Application\Common\Exception\ResourceNotFoundException;
+use App\Infrastructure\Common\Service\ResponseCreator;
 use Symfony\Component\ErrorHandler\Exception\FlattenException;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
 
-class ExceptionController
+class ExceptionController extends AbstractController
 {
-    public function showAction(Request $request, $exception, DebugLoggerInterface $logger = null)
+    public function showAction(ResponseCreator $responseCreator, Request $request, $exception, DebugLoggerInterface $logger = null)
     {
         if ($exception instanceof FlattenException) {
             $error = $exception->getMessage();
@@ -21,6 +20,10 @@ class ExceptionController
             $code = Response::HTTP_INTERNAL_SERVER_ERROR;
         }
 
-        return new JsonResponse(['message' => $error], $code);
+        return $responseCreator->create(
+            null,
+            $error,
+            $code
+        );
     }
 }
