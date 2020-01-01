@@ -49,6 +49,9 @@ class DoctrineProductRepository extends ServiceEntityRepository implements Produ
                 ->setParameter('description', '%' . addcslashes($filters->text(), '%_') . '%');
         }
 
+        $queryBuilder->setFirstResult(($pagination->page() - 1) * $pagination->itemsPerPage());
+        $queryBuilder->setMaxResults($pagination->itemsPerPage());
+
         return $queryBuilder->getQuery()->getResult();
     }
 }
