@@ -54,4 +54,18 @@ class GetProductsCommandTest extends TestCase
         );
         $this->assertSame($command->text(), $text);
     }
+
+    public function testEmptyGetters()
+    {
+        $command = new GetProductsCommand(
+            null,
+            null,
+            null,
+            null
+        );
+        $this->assertEmpty($command->taxonomyUuid());
+        $this->assertEmpty($command->minimumPrice());
+        $this->assertEmpty($command->maximumPrice());
+        $this->assertEmpty($command->text());
+    }
 }
