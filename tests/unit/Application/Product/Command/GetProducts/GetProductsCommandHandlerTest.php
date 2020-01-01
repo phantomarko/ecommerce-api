@@ -2,11 +2,14 @@
 
 namespace App\Tests\unit\Application\Product\Command\GetProducts;
 
+use App\Application\Common\Service\PaginatedResultToArrayConverter;
 use App\Application\Product\Command\GetProducts\GetProductsCommand;
 use App\Application\Product\Command\GetProducts\GetProductsCommandHandler;
 use App\Application\Product\Service\GetProductsCommandToPaginationConverter;
 use App\Application\Product\Service\GetProductsCommandToProductFiltersConverter;
+use App\Application\Product\Service\ProductPaginatedResultToArrayConverter;
 use App\Application\Product\Service\ProductToArrayConverter;
+use App\Domain\Common\Repository\PaginatedResult;
 use App\Domain\Common\Repository\Pagination;
 use App\Domain\Common\Service\PaginationFactory;
 use App\Domain\Product\Model\Product;
@@ -28,30 +31,30 @@ class GetProductsCommandHandlerTest extends TestCase
         $pagination = $this->prophesize(Pagination::class);
         $commandToPaginationConverter->convert($command->reveal())->willReturn($pagination->reveal());
 
-        $product = $this->prophesize(Product::class);
+        $paginatedResult = $this->prophesize(PaginatedResult::class);
         $productRepository = $this->prophesize(ProductRepositoryInterface::class);
-        $productRepository->findPaginatedByFilters($filters->reveal(), $pagination->reveal())->willReturn([
-            $product
-        ]);
+        $productRepository->findPaginatedByFilters($filters->reveal(), $pagination->reveal())->willReturn($paginatedResult->reveal());
         $productToArrayConverter = $this->prophesize(ProductToArrayConverter::class);
-        $productToArrayConverter->toArray($product)->willReturn([
-            'uuid' => 'uuid',
-            'name' => 'name',
-            'description' => 'description',
-            'price' => floatval(100),
-            'priceWithVat' => floatval(121),
-            'taxonomyName' => 'taxonomy'
-        ]);
 
+        $paginatedResultToArrayConverter = $this->prophesize(ProductPaginatedResultToArrayConverter::class);
+        $paginatedResultToArrayConverter->convert($paginatedResult->reveal())->willReturn([
+            'page' => 1,
+            'itemsPerPage' => 10,
+            'totalItems' => 100,
+            'items' => []
+        ]);
         $handler = new GetProductsCommandHandler(
             $productRepository->reveal(),
-            $productToArrayConverter->reveal(),
             $commandToProductFiltersConverter->reveal(),
-            $commandToPaginationConverter->reveal()
+            $commandToPaginationConverter->reveal(),
+            $paginatedResultToArrayConverter->reveal()
         );
-        $products = $handler->handle($command->reveal());
+        $productsPaginatedArray = $handler->handle($command->reveal());
 
-        $this->assertIsArray($products);
-        $this->assertCount(1, $products);
+        $this->assertIsArray($productsPaginatedArray);
+        $this->assertArrayHasKey('page', $productsPaginatedArray);
+        $this->assertArrayHasKey('itemsPerPage', $productsPaginatedArray);
+        $this->assertArrayHasKey('totalItems', $productsPaginatedArray);
+        $this->assertArrayHasKey('items', $productsPaginatedArray);
     }
 }

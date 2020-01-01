@@ -2,6 +2,11 @@ services:
     app.product_to_array_converter:
         class: 'App\Application\Product\Service\ProductToArrayConverter'
 
+    app.product_paginated_result_to_array_converter:
+        class: 'App\Application\Product\Service\ProductPaginatedResultToArrayConverter'
+        arguments:
+            - '@app.product_to_array_converter'
+
     app.get_products_command_to_product_filters_converter:
         class: 'App\Application\Product\Service\GetProductsCommandToProductFiltersConverter'
         arguments:
@@ -25,9 +30,9 @@ services:
             - { name: tactician.handler, typehints: true }
         arguments:
             - '@app.doctrine_product_repository'
-            - '@app.product_to_array_converter'
             - '@app.get_products_command_to_product_filters_converter'
             - '@app.get_products_command_to_pagination_converter'
+            - '@app.product_paginated_result_to_array_converter'
 
     app.create_product_command_handler:
         class: App\Application\Product\Command\CreateProduct\CreateProductCommandHandler

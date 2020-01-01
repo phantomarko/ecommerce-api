@@ -4,3 +4,6 @@ services:
 
     app.paginator_factory:
         class: 'App\Domain\Common\Service\PaginationFactory'
+
+    app.paginated_result_to_array_converter:
+        class: 'App\Application\Common\Service\PaginatedResultToArrayConverter'

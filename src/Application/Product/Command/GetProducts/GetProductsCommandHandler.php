@@ -4,28 +4,27 @@ namespace App\Application\Product\Command\GetProducts;
 
 use App\Application\Product\Service\GetProductsCommandToPaginationConverter;
 use App\Application\Product\Service\GetProductsCommandToProductFiltersConverter;
-use App\Application\Product\Service\ProductToArrayConverter;
-use App\Domain\Common\Service\PaginationFactory;
+use App\Application\Product\Service\ProductPaginatedResultToArrayConverter;
 use App\Domain\Product\Repository\ProductRepositoryInterface;
 
 class GetProductsCommandHandler
 {
     private $productRepository;
-    private $productToArrayConverter;
     private $commandToProductFiltersConverter;
     private $commandToPaginationConverter;
+    private $paginatedResultToArrayConverter;
 
     public function __construct(
         ProductRepositoryInterface $productRepository,
-        ProductToArrayConverter $productToArrayConverter,
         GetProductsCommandToProductFiltersConverter $commandToProductFiltersConverter,
-        GetProductsCommandToPaginationConverter $commandToPaginationConverter
+        GetProductsCommandToPaginationConverter $commandToPaginationConverter,
+        ProductPaginatedResultToArrayConverter $paginatedResultToArrayConverter
     )
     {
         $this->productRepository = $productRepository;
-        $this->productToArrayConverter = $productToArrayConverter;
         $this->commandToProductFiltersConverter = $commandToProductFiltersConverter;
         $this->commandToPaginationConverter = $commandToPaginationConverter;
+        $this->paginatedResultToArrayConverter = $paginatedResultToArrayConverter;
     }
 
     public function handle(GetProductsCommand $command)
@@ -34,8 +33,6 @@ class GetProductsCommandHandler
         $pagination = $this->commandToPaginationConverter->convert($command);
         $productsPaginated = $this->productRepository->findPaginatedByFilters($filters, $pagination);
 
-        return array_map(function ($product) {
-            return $this->productToArrayConverter->toArray($product);
-        }, $productsPaginated->items());
+        return $this->paginatedResultToArrayConverter->convert($productsPaginated);
     }
 }
