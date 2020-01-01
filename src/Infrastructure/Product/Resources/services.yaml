@@ -2,6 +2,11 @@ services:
     app.product.service.product_to_array:
         class: 'App\Application\Product\Service\ProductToArrayConverter'
 
+    app.get_products_command_to_product_filters_converter:
+        class: 'App\Application\Product\Service\GetProductsCommandToProductFiltersConverter'
+        arguments:
+            - '@app.taxonomy.repository.doctrine'
+
     app.product.service.product_factory:
         class: App\Domain\Product\Service\ProductFactory
         arguments:
@@ -16,7 +21,7 @@ services:
         arguments:
             - '@app.product.repository.doctrine'
             - '@app.product.service.product_to_array'
-            - '@app.taxonomy.repository.doctrine'
+            - '@app.get_products_command_to_product_filters_converter'
 
     app.product.command.create_product:
         class: App\Application\Product\Command\CreateProduct\CreateProductCommandHandler
