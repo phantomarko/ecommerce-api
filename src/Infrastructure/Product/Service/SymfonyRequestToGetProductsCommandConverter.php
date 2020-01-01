@@ -15,6 +15,8 @@ class SymfonyRequestToGetProductsCommandConverter
             throw new InvalidSymfonyRequestException();
         } else {
             return new GetProductsCommand(
+                $requestDecoded['page'],
+                $requestDecoded['itemsPerPage'],
                 !empty($requestDecoded['taxonomyUuid'])
                     ? $requestDecoded['taxonomyUuid']
                     : null,
@@ -43,6 +45,8 @@ class SymfonyRequestToGetProductsCommandConverter
                 empty($request['maximumPrice'])
                 || (!empty($request['maximumPrice']) && is_numeric($request['maximumPrice']))
             )
+            && (!empty($request['page']) && is_numeric($request['page']))
+            && (!empty($request['itemsPerPage']) && is_numeric($request['itemsPerPage']))
         );
     }
 }

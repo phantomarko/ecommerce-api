@@ -7,10 +7,47 @@ use PHPUnit\Framework\TestCase;
 
 class GetProductsCommandTest extends TestCase
 {
+    private $page;
+    private $itemsPerPage;
+
+    public function setUp()
+    {
+        $this->page = 1;
+        $this->itemsPerPage = 10;
+    }
+
+    public function testPage()
+    {
+        $command = new GetProductsCommand(
+            $this->page,
+            $this->itemsPerPage,
+            null,
+            null,
+            null,
+            null
+        );
+        $this->assertSame($command->page(), $this->page);
+    }
+
+    public function testItemsPerPage()
+    {
+        $command = new GetProductsCommand(
+            $this->page,
+            $this->itemsPerPage,
+            null,
+            null,
+            null,
+            null
+        );
+        $this->assertSame($command->itemsPerPage(), $this->itemsPerPage);
+    }
+
     public function testTaxonomyUuid()
     {
         $taxonomyUuid = 'uuid';
         $command = new GetProductsCommand(
+            $this->page,
+            $this->itemsPerPage,
             $taxonomyUuid,
             null,
             null,
@@ -23,6 +60,8 @@ class GetProductsCommandTest extends TestCase
     {
         $minimumPrice = floatval(100);
         $command = new GetProductsCommand(
+            $this->page,
+            $this->itemsPerPage,
             null,
             $minimumPrice,
             null,
@@ -35,6 +74,8 @@ class GetProductsCommandTest extends TestCase
     {
         $maximumPrice = floatval(100);
         $command = new GetProductsCommand(
+            $this->page,
+            $this->itemsPerPage,
             null,
             null,
             $maximumPrice,
@@ -47,6 +88,8 @@ class GetProductsCommandTest extends TestCase
     {
         $text = 'text';
         $command = new GetProductsCommand(
+            $this->page,
+            $this->itemsPerPage,
             null,
             null,
             null,
@@ -58,6 +101,8 @@ class GetProductsCommandTest extends TestCase
     public function testEmptyGetters()
     {
         $command = new GetProductsCommand(
+            $this->page,
+            $this->itemsPerPage,
             null,
             null,
             null,

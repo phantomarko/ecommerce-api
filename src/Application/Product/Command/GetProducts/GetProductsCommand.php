@@ -8,8 +8,12 @@ class GetProductsCommand
     private $minimumPrice;
     private $maximumPrice;
     private $text;
+    private $page;
+    private $itemsPerPage;
 
     public function __construct(
+        int $page,
+        int $itemsPerPage,
         ?string $taxonomyUuid,
         ?float $minimumPrice,
         ?float $maximumPrice,
@@ -20,6 +24,18 @@ class GetProductsCommand
         $this->minimumPrice = $minimumPrice;
         $this->maximumPrice = $maximumPrice;
         $this->text = $text;
+        $this->page = $page;
+        $this->itemsPerPage = $itemsPerPage;
+    }
+
+    public function page(): int
+    {
+        return $this->page;
+    }
+
+    public function itemsPerPage(): int
+    {
+        return $this->itemsPerPage;
     }
 
     public function taxonomyUuid(): ?string
