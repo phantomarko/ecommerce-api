@@ -10,9 +10,9 @@ class PaginationFactory
     public function create(int $page, int $itemsPerPage)
     {
         if ($page < 1) {
-            throw new PaginationParametersOutOfBoundsException('Page value is less than one');
+            throw new PaginationParametersOutOfBoundsException('Page value is less than one.');
         } elseif ($itemsPerPage > 100 || $itemsPerPage < 1) {
-            throw new PaginationParametersOutOfBoundsException('Items per page value is outside of 1-100 range');
+            throw new PaginationParametersOutOfBoundsException('Items per page value is outside of 1-100 range.');
         } else {
             return new Pagination($page, $itemsPerPage);
         }

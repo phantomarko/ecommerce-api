@@ -36,7 +36,7 @@ class ListProductsController extends AbstractController
 
         return $this->responseCreator->create(
             $products,
-            'Products fetched successfully',
+            'Products fetched successfully.',
             Response::HTTP_OK
         );
     }

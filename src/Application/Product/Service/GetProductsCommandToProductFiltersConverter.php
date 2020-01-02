@@ -34,7 +34,7 @@ class GetProductsCommandToProductFiltersConverter
         } else {
             $taxonomy = $this->taxonomyRepository->findOneByUuid($uuid);
             if (empty($taxonomy)) {
-                throw new ResourceNotFoundException('Taxonomy \'' . $uuid . '\' not found');
+                throw new ResourceNotFoundException('Taxonomy \'' . $uuid . '\' not found.');
             } else {
                 return $taxonomy;
             }

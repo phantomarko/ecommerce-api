@@ -36,7 +36,7 @@ class CreateProductController extends AbstractController
 
         return $this->responseCreator->create(
             $product,
-            'Product created successfully',
+            'Product created successfully.',
             Response::HTTP_CREATED
         );
     }
