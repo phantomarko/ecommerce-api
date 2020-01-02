@@ -3,6 +3,7 @@
 namespace App\Domain\Product\Service;
 
 use App\Domain\Common\Service\UuidGeneratorInterface;
+use App\Domain\Product\Exception\NegativeProductPriceException;
 use App\Domain\Product\Model\Product;
 use App\Domain\Product\Repository\ProductRepositoryInterface;
 use App\Domain\Taxonomy\Exception\TaxonomyNotFoundException;
@@ -33,6 +34,7 @@ class ProductFactory
         ?string $taxonomyUuid
     ): Product
     {
+        $this->validatePrice($price);
         $product = new Product(
             $this->uuidGenerator->generate(),
             $name,
@@ -57,6 +59,13 @@ class ProductFactory
             } else {
                 return $taxonomy;
             }
+        }
+    }
+
+    private function validatePrice(float $price): void
+    {
+        if ($price <= 0) {
+            throw new NegativeProductPriceException();
         }
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Tests\unit\Domain\Product\Service;
 
 use App\Domain\Common\Service\UuidGeneratorInterface;
+use App\Domain\Product\Exception\NegativeProductPriceException;
 use App\Domain\Product\Model\Product;
 use App\Domain\Product\Repository\ProductRepositoryInterface;
 use App\Domain\Product\Service\ProductFactory;
@@ -24,12 +25,13 @@ class ProductFactoryTest extends TestCase
         $this->taxonomyRepository = $this->prophesize(TaxonomyRepositoryInterface::class);
     }
 
-    public function testCreateProduct()
+    /**
+     * @dataProvider createProductProvider
+     */
+    public function testCreateProduct(float $price, float $priceWithVat)
     {
         $name = 'name';
         $description = 'description';
-        $price = 100;
-        $priceWithVat = 121;
         $taxonomyUuid = 'uuid';
         $taxonomy = $this->prophesize(Taxonomy::class);
         $taxonomy->name()->willReturn('taxonomy');
@@ -56,6 +58,35 @@ class ProductFactoryTest extends TestCase
         $this->assertSame($product->price(), floatval($price));
         $this->assertSame($product->priceWithVat(), floatval($priceWithVat));
         $this->assertNotEmpty($product->taxonomyName());
+    }
+
+    public function createProductProvider()
+    {
+        return [
+            [100, 121],
+            [0.1, 0.121]
+        ];
+    }
+
+    public function testCreateProductWithNegativePrice()
+    {
+        $name = 'name';
+        $description = 'description';
+        $price = 0;
+        $taxonomyUuid = 'uuid';
+        $productFactory = new ProductFactory(
+            $this->productRepository->reveal(),
+            $this->uuidGenerator->reveal(),
+            $this->taxonomyRepository->reveal()
+        );
+
+        $this->expectException(NegativeProductPriceException::class);
+        $productFactory->createProduct(
+            $name,
+            $description,
+            $price,
+            $taxonomyUuid
+        );
     }
 
     public function testCreateProductWithEmptyTaxonomyUuid()
