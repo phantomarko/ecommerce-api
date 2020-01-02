@@ -1,3 +1,4 @@
 product:
     type: rest
+    prefix: /api
     resource: '../src/Infrastructure/Product/Resources/routes.yaml'

@@ -11,4 +11,5 @@ fos_rest:
         exception_controller: 'App\Infrastructure\Common\Controller\ExceptionController::showAction'
     format_listener:
         rules:
-            - { path: ^/, prefer_extension: false, fallback_format: json, priorities: json }
+            - { path: ^/api/, prefer_extension: false, fallback_format: json, priorities: json }
+            - { path: ^/, prefer_extension: true, fallback_format: ~, priorities: [ 'html', '*/*' ] }
