@@ -22,6 +22,8 @@ class CreateProductCommandHandlerTest extends TestCase
         $command->price()->willReturn($price);
         $taxonomyUuid = 'uuid';
         $command->taxonomyUuid()->willReturn($taxonomyUuid);
+        $base64Image = 'base64';
+        $command->base64Image()->willReturn($base64Image);
 
         $product = $this->prophesize(Product::class);
         $productFactory = $this->prophesize(ProductFactory::class);
@@ -29,7 +31,8 @@ class CreateProductCommandHandlerTest extends TestCase
             $name,
             $description,
             $price,
-            $taxonomyUuid
+            $taxonomyUuid,
+            $base64Image
         )->willReturn($product->reveal());
 
         $productToArrayConverter = $this->prophesize(ProductToArrayConverter::class);

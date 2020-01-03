@@ -18,14 +18,15 @@ services:
             - '@app.paginator_factory'
 
     app.product_factory:
-        class: App\Domain\Product\Service\ProductFactory
+        class: 'App\Domain\Product\Service\ProductFactory'
         arguments:
             - '@app.doctrine_product_repository'
             - '@app.ramsey_uuid_generator'
             - '@app.doctrine_taxonomy_repository'
+            - '@app.file_system_base_64_image_uploader'
 
     app.get_products_command_handler:
-        class: App\Application\Product\Command\GetProducts\GetProductsCommandHandler
+        class: 'App\Application\Product\Command\GetProducts\GetProductsCommandHandler'
         tags:
             - { name: tactician.handler, typehints: true }
         arguments:
@@ -35,7 +36,7 @@ services:
             - '@app.product_paginated_result_to_array_converter'
 
     app.create_product_command_handler:
-        class: App\Application\Product\Command\CreateProduct\CreateProductCommandHandler
+        class: 'App\Application\Product\Command\CreateProduct\CreateProductCommandHandler'
         tags:
             - { name: tactician.handler, typehints: true }
         arguments:
@@ -43,6 +44,6 @@ services:
             - '@app.product_to_array_converter'
 
     app.doctrine_product_repository:
-        class: App\Infrastructure\Product\Repository\DoctrineProductRepository
+        class: 'App\Infrastructure\Product\Repository\DoctrineProductRepository'
         arguments:
             - '@Doctrine\Persistence\ManagerRegistry'

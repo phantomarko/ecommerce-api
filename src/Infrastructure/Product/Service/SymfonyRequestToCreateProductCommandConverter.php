@@ -20,7 +20,8 @@ class SymfonyRequestToCreateProductCommandConverter
                 $requestDecoded['price'],
                 !empty($requestDecoded['taxonomyUuid'])
                     ? $requestDecoded['taxonomyUuid']
-                    : null
+                    : null,
+                $requestDecoded['base64Image']
             );
         }
     }
@@ -32,6 +33,7 @@ class SymfonyRequestToCreateProductCommandConverter
             && !empty($request['description'])
             && !empty($request['price'])
             && is_numeric($request['price'])
+            && !empty($request['base64Image'])
         );
     }
 }

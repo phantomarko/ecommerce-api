@@ -12,6 +12,7 @@ class CreateProductCommandTest extends TestCase
     private $price;
     private $taxonomyUuid;
     private $command;
+    private $base64Image;
 
     public function setUp()
     {
@@ -19,12 +20,14 @@ class CreateProductCommandTest extends TestCase
         $this->description = 'description';
         $this->price = floatval(288);
         $this->taxonomyUuid = 'uuid';
+        $this->base64Image = 'base64';
 
         $this->command = new CreateProductCommand(
             $this->name,
             $this->description,
             $this->price,
-            $this->taxonomyUuid
+            $this->taxonomyUuid,
+            $this->base64Image
         );
     }
 
@@ -54,9 +57,15 @@ class CreateProductCommandTest extends TestCase
             $this->name,
             $this->description,
             $this->price,
-            null
+            null,
+            $this->base64Image
         );
 
         $this->assertEmpty($command->taxonomyUuid());
+    }
+
+    public function testBase64Image()
+    {
+        $this->assertEquals($this->command->base64Image(), $this->base64Image);
     }
 }
