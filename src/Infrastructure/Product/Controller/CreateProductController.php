@@ -60,7 +60,7 @@ class CreateProductController extends AbstractController
      *          @SWG\Property(
      *              property="base64Image",
      *              type="string",
-     *              description="Image in base64 with mime type metadata. Required field."
+     *              description="Image in base64 with mime type metadata. Required field. Example: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAA'"
      *          )
      *     )
      * )
