@@ -2,7 +2,7 @@ services:
     app.product_to_array_converter:
         class: 'App\Application\Product\Service\ProductToArrayConverter'
         arguments:
-            - '@app.explode_image_url_generator'
+            - '@app.file_system_image_url_generator'
 
     app.product_paginated_result_to_array_converter:
         class: 'App\Application\Product\Service\ProductPaginatedResultToArrayConverter'

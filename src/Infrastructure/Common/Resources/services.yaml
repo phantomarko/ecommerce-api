@@ -1,6 +1,7 @@
 parameters:
     project_path: '%kernel.project_dir%'
-    uploads_relative_path: '/public/images'
+    images_relative_path: '/public/images'
+    images_relative_url: '/images'
 services:
     app.ramsey_uuid_generator:
         class: 'App\Infrastructure\Common\Service\RamseyUuidGenerator'
@@ -18,9 +19,13 @@ services:
         class: 'App\Infrastructure\Common\Service\FileSystemBase64ImageUploader'
         arguments:
             - '%project_path%'
-            - '%uploads_relative_path%'
+            - '%images_relative_path%'
             - '@app.file_system_base_64_to_mime_type_converter'
             - '@app.ramsey_uuid_generator'
 
-    app.explode_image_url_generator:
-        class: 'App\Infrastructure\Common\Service\ExplodeImageUrlGenerator'
+    app.file_system_image_url_generator:
+        class: 'App\Infrastructure\Common\Service\FileSystemImageUrlGenerator'
+        arguments:
+            - '%project_path%'
+            - '%images_relative_path%'
+            - '%images_relative_url%'

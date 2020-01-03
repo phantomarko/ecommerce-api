@@ -11,19 +11,19 @@ use App\Domain\Common\Service\UuidGeneratorInterface;
 class FileSystemBase64ImageUploader implements Base64ImageUploaderInterface
 {
     private $projectPath;
-    private $uploadsRelativePath;
+    private $imagesRelativePath;
     private $base64ToMimeTypeConverter;
     private $uuidGenerator;
 
     public function __construct(
         string $projectPath,
-        string $uploadsRelativePath,
+        string $imagesRelativePath,
         Base64ToMimeTypeConverterInterface $base64ToMimeTypeConverter,
         UuidGeneratorInterface $uuidGenerator
     )
     {
         $this->projectPath = $projectPath;
-        $this->uploadsRelativePath = $uploadsRelativePath;
+        $this->imagesRelativePath = $imagesRelativePath;
         $this->base64ToMimeTypeConverter = $base64ToMimeTypeConverter;
         $this->uuidGenerator = $uuidGenerator;
     }
@@ -53,7 +53,7 @@ class FileSystemBase64ImageUploader implements Base64ImageUploaderInterface
         return DIRECTORY_SEPARATOR
             . trim($this->projectPath, DIRECTORY_SEPARATOR)
             . DIRECTORY_SEPARATOR
-            . trim($this->uploadsRelativePath, DIRECTORY_SEPARATOR)
+            . trim($this->imagesRelativePath, DIRECTORY_SEPARATOR)
             . DIRECTORY_SEPARATOR
             . $this->uuidGenerator->generate()
             . '.'
