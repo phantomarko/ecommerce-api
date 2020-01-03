@@ -36,15 +36,12 @@ class GetProductsCommandHandlerTest extends TestCase
         $paginatedResult = $this->prophesize(PaginatedResult::class);
         $productRepository = $this->prophesize(ProductRepositoryInterface::class);
         $productRepository->findPaginatedByFilters($filters->reveal(), $pagination->reveal())->willReturn($paginatedResult->reveal());
-        $productToArrayConverter = $this->prophesize(ProductToArrayConverter::class);
 
         $paginatedResultToArrayConverter = $this->prophesize(ProductPaginatedResultToArrayConverter::class);
         $paginatedResultToArrayConverter->convert($paginatedResult->reveal(), $hostUrl)->willReturn([
-            'page' => 1,
-            'itemsPerPage' => 10,
-            'totalItems' => 100,
-            'items' => []
+            'page' => 1, // It is not necessary to return the real response
         ]);
+
         $handler = new GetProductsCommandHandler(
             $productRepository->reveal(),
             $commandToProductFiltersConverter->reveal(),
@@ -55,8 +52,5 @@ class GetProductsCommandHandlerTest extends TestCase
 
         $this->assertIsArray($productsPaginatedArray);
         $this->assertArrayHasKey('page', $productsPaginatedArray);
-        $this->assertArrayHasKey('itemsPerPage', $productsPaginatedArray);
-        $this->assertArrayHasKey('totalItems', $productsPaginatedArray);
-        $this->assertArrayHasKey('items', $productsPaginatedArray);
     }
 }
