@@ -19,6 +19,11 @@ App\Domain\Product\Model\Product:
         priceWithVat:
             type: float
             nullable: false
+        imagePath:
+            type: string
+            nullable: false
+            options:
+                default: '/path/to/image.ext'
     manyToOne:
         taxonomy:
             targetEntity: App\Domain\Taxonomy\Model\Taxonomy

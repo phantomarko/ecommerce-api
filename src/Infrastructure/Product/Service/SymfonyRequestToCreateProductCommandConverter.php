@@ -15,12 +15,14 @@ class SymfonyRequestToCreateProductCommandConverter
             throw new InvalidSymfonyRequestException();
         } else {
             return new CreateProductCommand(
+                $request->getUriForPath(''),
                 $requestDecoded['name'],
                 $requestDecoded['description'],
                 $requestDecoded['price'],
                 !empty($requestDecoded['taxonomyUuid'])
                     ? $requestDecoded['taxonomyUuid']
-                    : null
+                    : null,
+                $requestDecoded['base64Image']
             );
         }
     }
@@ -32,6 +34,7 @@ class SymfonyRequestToCreateProductCommandConverter
             && !empty($request['description'])
             && !empty($request['price'])
             && is_numeric($request['price'])
+            && !empty($request['base64Image'])
         );
     }
 }

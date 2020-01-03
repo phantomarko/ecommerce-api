@@ -2,6 +2,7 @@
 
 namespace App\Domain\Product\Service;
 
+use App\Domain\Common\Service\Base64ImageUploaderInterface;
 use App\Domain\Common\Service\UuidGeneratorInterface;
 use App\Domain\Product\Exception\NegativeProductPriceException;
 use App\Domain\Product\Model\Product;
@@ -15,33 +16,41 @@ class ProductFactory
     private $productRepository;
     private $uuidGenerator;
     private $taxonomyRepository;
+    private $base64ImageUploader;
 
     public function __construct(
         ProductRepositoryInterface $productRepository,
         UuidGeneratorInterface $uuidGenerator,
-        TaxonomyRepositoryInterface $taxonomyRepository
+        TaxonomyRepositoryInterface $taxonomyRepository,
+        Base64ImageUploaderInterface $base64ImageUploader
     )
     {
         $this->productRepository = $productRepository;
         $this->uuidGenerator = $uuidGenerator;
         $this->taxonomyRepository = $taxonomyRepository;
+        $this->base64ImageUploader = $base64ImageUploader;
     }
 
     public function createProduct(
         string $name,
         string $description,
         float $price,
-        ?string $taxonomyUuid
+        ?string $taxonomyUuid,
+        string $base64Image
     ): Product
     {
         $this->validatePrice($price);
+        $taxonomy = $this->getTaxonomyByUuid($taxonomyUuid);
+        $uuid = $this->uuidGenerator->generate();
+        $imageRelativePath = $this->base64ImageUploader->upload($base64Image);
         $product = new Product(
-            $this->uuidGenerator->generate(),
+            $uuid,
             $name,
             $description,
             $price,
             $price + ($price * 0.21),
-            $this->getTaxonomyByUuid($taxonomyUuid)
+            $taxonomy,
+            $imageRelativePath
         );
         $this->productRepository->add($product);
 

@@ -14,6 +14,8 @@ class CreateProductCommandHandlerTest extends TestCase
     public function testHandle()
     {
         $command = $this->prophesize(CreateProductCommand::class);
+        $hostUrl = 'url';
+        $command->hostUrl()->willReturn($hostUrl);
         $name = 'name';
         $command->name()->willReturn($name);
         $description = 'description';
@@ -22,6 +24,8 @@ class CreateProductCommandHandlerTest extends TestCase
         $command->price()->willReturn($price);
         $taxonomyUuid = 'uuid';
         $command->taxonomyUuid()->willReturn($taxonomyUuid);
+        $base64Image = 'base64';
+        $command->base64Image()->willReturn($base64Image);
 
         $product = $this->prophesize(Product::class);
         $productFactory = $this->prophesize(ProductFactory::class);
@@ -29,38 +33,22 @@ class CreateProductCommandHandlerTest extends TestCase
             $name,
             $description,
             $price,
-            $taxonomyUuid
+            $taxonomyUuid,
+            $base64Image
         )->willReturn($product->reveal());
 
         $productToArrayConverter = $this->prophesize(ProductToArrayConverter::class);
-        $productToArrayConverter->convert($product->reveal())->willReturn([
-            'uuid' => 'uuid',
-            'name' => $name,
-            'description' => $description,
-            'price' => $price,
-            'priceWithVat' => $price + ($price * 0.21),
-            'taxonomyName' => 'taxonomy'
+        $productToArrayConverter->convert($product->reveal(), $hostUrl)->willReturn([
+            'uuid' => 'uuid' // It is not necessary to return the real response
         ]);
 
         $handler = new CreateProductCommandHandler(
             $productFactory->reveal(),
             $productToArrayConverter->reveal()
         );
-
         $productArray = $handler->handle($command->reveal());
 
         $this->assertIsArray($productArray);
         $this->assertArrayHasKey('uuid', $productArray);
-        $this->assertNotEmpty($productArray['uuid']);
-        $this->assertArrayHasKey('name', $productArray);
-        $this->assertSame($productArray['name'], $name);
-        $this->assertArrayHasKey('description', $productArray);
-        $this->assertSame($productArray['description'], $description);
-        $this->assertArrayHasKey('price', $productArray);
-        $this->assertSame($productArray['price'], $price);
-        $this->assertArrayHasKey('priceWithVat', $productArray);
-        $this->assertNotEmpty($productArray['priceWithVat']);
-        $this->assertArrayHasKey('taxonomyName', $productArray);
-        $this->assertNotEmpty($productArray['taxonomyName']);
     }
 }

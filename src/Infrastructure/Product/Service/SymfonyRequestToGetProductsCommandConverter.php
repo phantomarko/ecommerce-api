@@ -15,6 +15,7 @@ class SymfonyRequestToGetProductsCommandConverter
             throw new InvalidSymfonyRequestException();
         } else {
             return new GetProductsCommand(
+                $request->getUriForPath(''),
                 $requestDecoded['page'],
                 $requestDecoded['itemsPerPage'],
                 !empty($requestDecoded['taxonomyUuid'])

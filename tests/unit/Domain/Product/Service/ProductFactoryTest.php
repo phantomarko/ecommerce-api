@@ -2,6 +2,7 @@
 
 namespace App\Tests\unit\Domain\Product\Service;
 
+use App\Domain\Common\Service\Base64ImageUploaderInterface;
 use App\Domain\Common\Service\UuidGeneratorInterface;
 use App\Domain\Product\Exception\NegativeProductPriceException;
 use App\Domain\Product\Model\Product;
@@ -17,12 +18,20 @@ class ProductFactoryTest extends TestCase
     private $productRepository;
     private $uuidGenerator;
     private $taxonomyRepository;
+    private $base64ImageUploader;
+    private $name;
+    private $description;
+    private $base64Image;
 
     public function setUp()
     {
         $this->productRepository = $this->prophesize(ProductRepositoryInterface::class);
         $this->uuidGenerator = $this->prophesize(UuidGeneratorInterface::class);
         $this->taxonomyRepository = $this->prophesize(TaxonomyRepositoryInterface::class);
+        $this->base64ImageUploader = $this->prophesize(Base64ImageUploaderInterface::class);
+        $this->name = 'name';
+        $this->description = 'description';
+        $this->base64Image = 'base64Image';
     }
 
     /**
@@ -30,34 +39,37 @@ class ProductFactoryTest extends TestCase
      */
     public function testCreateProduct(float $price, float $priceWithVat)
     {
-        $name = 'name';
-        $description = 'description';
         $taxonomyUuid = 'uuid';
         $taxonomy = $this->prophesize(Taxonomy::class);
         $taxonomy->name()->willReturn('taxonomy');
         $this->taxonomyRepository->findOneByUuid($taxonomyUuid)->willReturn($taxonomy->reveal());
+        $imageRelativePath = 'path/to/image.ext';
+        $this->base64ImageUploader->upload($this->base64Image)->willReturn($imageRelativePath);
         $this->uuidGenerator->generate()->willReturn('uuid');
 
         $productFactory = new ProductFactory(
             $this->productRepository->reveal(),
             $this->uuidGenerator->reveal(),
-            $this->taxonomyRepository->reveal()
+            $this->taxonomyRepository->reveal(),
+            $this->base64ImageUploader->reveal()
         );
 
         $product = $productFactory->createProduct(
-            $name,
-            $description,
+            $this->name,
+            $this->description,
             $price,
-            $taxonomyUuid
+            $taxonomyUuid,
+            $this->base64Image
         );
 
         $this->assertInstanceOf(Product::class, $product);
         $this->assertNotEmpty($product->uuid());
-        $this->assertSame($product->name(), $name);
-        $this->assertSame($product->description(), $description);
+        $this->assertSame($product->name(), $this->name);
+        $this->assertSame($product->description(), $this->description);
         $this->assertSame($product->price(), floatval($price));
         $this->assertSame($product->priceWithVat(), floatval($priceWithVat));
         $this->assertNotEmpty($product->taxonomyName());
+        $this->assertSame($product->imagePath(), $imageRelativePath);
     }
 
     public function createProductProvider()
@@ -70,61 +82,61 @@ class ProductFactoryTest extends TestCase
 
     public function testCreateProductWithNegativePrice()
     {
-        $name = 'name';
-        $description = 'description';
         $price = 0;
         $taxonomyUuid = 'uuid';
         $productFactory = new ProductFactory(
             $this->productRepository->reveal(),
             $this->uuidGenerator->reveal(),
-            $this->taxonomyRepository->reveal()
+            $this->taxonomyRepository->reveal(),
+            $this->base64ImageUploader->reveal()
         );
 
         $this->expectException(NegativeProductPriceException::class);
         $productFactory->createProduct(
-            $name,
-            $description,
+            $this->name,
+            $this->description,
             $price,
-            $taxonomyUuid
+            $taxonomyUuid,
+            $this->base64Image
         );
     }
 
     public function testCreateProductWithEmptyTaxonomyUuid()
     {
-        $name = 'name';
-        $description = 'description';
         $price = 100;
         $priceWithVat = 121;
         $this->uuidGenerator->generate()->willReturn('uuid');
+        $imageRelativePath = 'path/to/image.ext';
+        $this->base64ImageUploader->upload($this->base64Image)->willReturn($imageRelativePath);
 
         $productFactory = new ProductFactory(
             $this->productRepository->reveal(),
             $this->uuidGenerator->reveal(),
-            $this->taxonomyRepository->reveal()
+            $this->taxonomyRepository->reveal(),
+            $this->base64ImageUploader->reveal()
         );
 
         $product = $productFactory->createProduct(
-            $name,
-            $description,
+            $this->name,
+            $this->description,
             $price,
-            null
+            null,
+            $this->base64Image
         );
 
         $this->assertInstanceOf(Product::class, $product);
         $this->assertIsString($product->uuid());
-        $this->assertSame($product->name(), $name);
-        $this->assertSame($product->description(), $description);
+        $this->assertSame($product->name(), $this->name);
+        $this->assertSame($product->description(), $this->description);
         $this->assertSame($product->price(), floatval($price));
         $this->assertSame($product->priceWithVat(), floatval($priceWithVat));
         $this->assertEmpty($product->taxonomyName());
+        $this->assertSame($product->imagePath(), $imageRelativePath);
     }
 
     public function testCreateProductThrowsTaxonomyNotFoundException()
     {
-        $name = 'name';
-        $description = 'description';
         $price = 100;
-        $priceWithVat = 121;
         $taxonomyUuid = 'uuid';
         $taxonomy = $this->prophesize(Taxonomy::class);
         $taxonomy->name()->willReturn('taxonomy');
@@ -134,15 +146,17 @@ class ProductFactoryTest extends TestCase
         $productFactory = new ProductFactory(
             $this->productRepository->reveal(),
             $this->uuidGenerator->reveal(),
-            $this->taxonomyRepository->reveal()
+            $this->taxonomyRepository->reveal(),
+            $this->base64ImageUploader->reveal()
         );
 
         $this->expectException(TaxonomyNotFoundException::class);
         $productFactory->createProduct(
-            $name,
-            $description,
+            $this->name,
+            $this->description,
             $price,
-            $taxonomyUuid
+            $taxonomyUuid,
+            $this->base64Image
         );
     }
 }

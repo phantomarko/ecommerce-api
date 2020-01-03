@@ -24,16 +24,17 @@ class ProductPaginatedResultToArrayConverterTest extends TestCase
             $product->reveal()
         ];
         $paginatedResult->items()->willReturn($items);
+        $hostUrl = 'url';
 
         $productToArrayConverter = $this->prophesize(ProductToArrayConverter::class);
-        $productToArrayConverter->convert($product->reveal())->willReturn([
+        $productToArrayConverter->convert($product->reveal(), $hostUrl)->willReturn([
             'uuid' => 'uuid'
         ]);
 
         $paginatedResultToArrayConverter = new ProductPaginatedResultToArrayConverter(
             $productToArrayConverter->reveal()
         );
-        $array = $paginatedResultToArrayConverter->convert($paginatedResult->reveal());
+        $array = $paginatedResultToArrayConverter->convert($paginatedResult->reveal(), $hostUrl);
 
         $this->assertIsArray($array);
         $this->assertArrayHasKey('page', $array);

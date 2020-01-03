@@ -39,33 +39,42 @@ class CreateProductController extends AbstractController
      *          type="object",
      *          @SWG\Property(
      *              property="name",
-     *              type="string"
+     *              type="string",
+     *              description="Required field."
      *          ),
      *          @SWG\Property(
      *              property="description",
-     *              type="string"
+     *              type="string",
+     *              description="Required field."
      *          ),
      *          @SWG\Property(
      *              property="price",
-     *              type="number"
+     *              type="number",
+     *              description="Required field."
      *          ),
      *          @SWG\Property(
      *              property="taxonomyUuid",
-     *              type="string"
+     *              type="string",
+     *              description="Taxonomy uuid. Optional field."
+     *          ),
+     *          @SWG\Property(
+     *              property="base64Image",
+     *              type="string",
+     *              description="Image in base64 with mime type metadata. Required field."
      *          )
      *     )
      * )
      * @SWG\Response(
      *     response=201,
-     *     description="Create product success"
+     *     description="Create product success."
      * )
      * @SWG\Response(
      *     response=400,
-     *     description="Request error"
+     *     description="Request error."
      * )
      * @SWG\Response(
      *     response=500,
-     *     description="Internal server error"
+     *     description="Internal server error."
      * )
      * @SWG\Tag(name="Products")
      */

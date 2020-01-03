@@ -2,11 +2,19 @@
 
 namespace App\Application\Product\Service;
 
+use App\Domain\Common\Service\ImageUrlGeneratorInterface;
 use App\Domain\Product\Model\Product;
 
 class ProductToArrayConverter
 {
-    public function convert(Product $product): array
+    private $imageUrlGenerator;
+
+    public function __construct(ImageUrlGeneratorInterface $imageUrlGenerator)
+    {
+        $this->imageUrlGenerator = $imageUrlGenerator;
+    }
+
+    public function convert(Product $product, string $hostUrl): array
     {
         return [
             'uuid' => $product->uuid(),
@@ -14,7 +22,8 @@ class ProductToArrayConverter
             'description' => $product->description(),
             'price' => $product->price(),
             'priceWithVat' => $product->priceWithVat(),
-            'taxonomyName' => $product->taxonomyName()
+            'taxonomyName' => $product->taxonomyName(),
+            'image' => $this->imageUrlGenerator->generate($hostUrl, $product->imagePath())
         ];
     }
 }
