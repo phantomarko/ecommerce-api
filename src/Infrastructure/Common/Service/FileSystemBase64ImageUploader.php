@@ -39,7 +39,7 @@ class FileSystemBase64ImageUploader implements Base64ImageUploaderInterface
     {
         $base64Parts = explode(',', $base64);
         if (is_array($base64Parts) && count($base64Parts) === 2) {
-            return $base64Parts[1];
+            return base64_decode($base64Parts[1]);
         } else {
             throw new InvalidBase64FormatException();
         }
