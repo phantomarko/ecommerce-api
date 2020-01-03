@@ -3,18 +3,12 @@
 namespace App\Tests\unit\Application\Product\Service;
 
 use App\Application\Product\Service\ProductToArrayConverter;
+use App\Domain\Common\Service\ImageUrlGeneratorInterface;
 use App\Domain\Product\Model\Product;
 use PHPUnit\Framework\TestCase;
 
 class ProductToArrayConverterTest extends TestCase
 {
-    private $productToArrayConverter;
-
-    public function setUp()
-    {
-        $this->productToArrayConverter = new ProductToArrayConverter();
-    }
-
     public function testToArray()
     {
         $product = $this->prophesize(Product::class);
@@ -30,8 +24,14 @@ class ProductToArrayConverterTest extends TestCase
         $product->priceWithVat()->willReturn($priceWithVat);
         $taxonomyName = 'taxonomy';
         $product->taxonomyName()->willReturn($taxonomyName);
+        $imagePath = 'taxonomy';
+        $product->imageRelativePath()->willReturn($imagePath);
+        $hostUrl = 'url';
 
-        $array = $this->productToArrayConverter->convert($product->reveal());
+        $imageUrlGenerator = $this->prophesize(ImageUrlGeneratorInterface::class);
+        $imageUrlGenerator->generate($hostUrl, $imagePath)->willReturn('imageUrl');
+        $productToArrayConverter = new ProductToArrayConverter($imageUrlGenerator->reveal());
+        $array = $productToArrayConverter->convert($product->reveal(), $hostUrl);
 
         $this->assertIsArray($array);
         $this->assertArrayHasKey('uuid', $array);
@@ -46,5 +46,6 @@ class ProductToArrayConverterTest extends TestCase
         $this->assertSame($array['priceWithVat'], $priceWithVat);
         $this->assertArrayHasKey('taxonomyName', $array);
         $this->assertSame($array['taxonomyName'], $taxonomyName);
+        $this->assertArrayHasKey('image', $array);
     }
 }

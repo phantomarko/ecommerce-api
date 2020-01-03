@@ -21,3 +21,6 @@ services:
             - '%uploads_relative_path%'
             - '@app.file_system_base_64_to_mime_type_converter'
             - '@app.ramsey_uuid_generator'
+
+    app.explode_image_url_generator:
+        class: 'App\Infrastructure\Common\Service\ExplodeImageUrlGenerator'

@@ -13,14 +13,14 @@ class ProductPaginatedResultToArrayConverter
         $this->converter = $converter;
     }
 
-    public function convert(PaginatedResult $paginatedResult)
+    public function convert(PaginatedResult $paginatedResult, string $hostUrl)
     {
         return [
             'page' => $paginatedResult->page(),
             'itemsPerPage' => $paginatedResult->itemsPerPage(),
             'totalItems' => $paginatedResult->totalItems(),
-            'items' => array_map(function ($product) {
-                return $this->converter->convert($product);
+            'items' => array_map(function ($product) use ($hostUrl){
+                return $this->converter->convert($product, $hostUrl);
             }, $paginatedResult->items())
         ];
     }

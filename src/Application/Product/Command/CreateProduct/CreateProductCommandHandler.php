@@ -28,6 +28,6 @@ class CreateProductCommandHandler
             $command->taxonomyUuid(),
             $command->base64Image()
         );
-        return $this->productToArrayConverter->convert($product);
+        return $this->productToArrayConverter->convert($product, $command->hostUrl());
     }
 }

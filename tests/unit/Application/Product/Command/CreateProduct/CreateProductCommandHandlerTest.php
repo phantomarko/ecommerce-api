@@ -14,6 +14,8 @@ class CreateProductCommandHandlerTest extends TestCase
     public function testHandle()
     {
         $command = $this->prophesize(CreateProductCommand::class);
+        $hostUrl = 'url';
+        $command->hostUrl()->willReturn($hostUrl);
         $name = 'name';
         $command->name()->willReturn($name);
         $description = 'description';
@@ -36,7 +38,7 @@ class CreateProductCommandHandlerTest extends TestCase
         )->willReturn($product->reveal());
 
         $productToArrayConverter = $this->prophesize(ProductToArrayConverter::class);
-        $productToArrayConverter->convert($product->reveal())->willReturn([
+        $productToArrayConverter->convert($product->reveal(), $hostUrl)->willReturn([
             'uuid' => 'uuid',
             'name' => $name,
             'description' => $description,

@@ -15,6 +15,7 @@ class SymfonyRequestToCreateProductCommandConverter
             throw new InvalidSymfonyRequestException();
         } else {
             return new CreateProductCommand(
+                $request->getUriForPath(''),
                 $requestDecoded['name'],
                 $requestDecoded['description'],
                 $requestDecoded['price'],

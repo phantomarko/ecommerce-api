@@ -33,6 +33,6 @@ class GetProductsCommandHandler
         $pagination = $this->commandToPaginationConverter->convert($command);
         $productsPaginated = $this->productRepository->findPaginatedByFilters($filters, $pagination);
 
-        return $this->paginatedResultToArrayConverter->convert($productsPaginated);
+        return $this->paginatedResultToArrayConverter->convert($productsPaginated, $command->hostUrl());
     }
 }

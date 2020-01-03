@@ -7,6 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class CreateProductCommandTest extends TestCase
 {
+    private $hostUrl;
     private $name;
     private $description;
     private $price;
@@ -16,6 +17,7 @@ class CreateProductCommandTest extends TestCase
 
     public function setUp()
     {
+        $this->hostUrl = 'http://host.example';
         $this->name = 'name';
         $this->description = 'description';
         $this->price = floatval(288);
@@ -23,12 +25,18 @@ class CreateProductCommandTest extends TestCase
         $this->base64Image = 'base64';
 
         $this->command = new CreateProductCommand(
+            $this->hostUrl,
             $this->name,
             $this->description,
             $this->price,
             $this->taxonomyUuid,
             $this->base64Image
         );
+    }
+
+    public function testHostUrl()
+    {
+        $this->assertSame($this->command->hostUrl(), $this->hostUrl);
     }
 
     public function testName()
@@ -54,6 +62,7 @@ class CreateProductCommandTest extends TestCase
     public function testEmptyTaxonomyUuid()
     {
         $command = new CreateProductCommand(
+            $this->hostUrl,
             $this->name,
             $this->description,
             $this->price,
