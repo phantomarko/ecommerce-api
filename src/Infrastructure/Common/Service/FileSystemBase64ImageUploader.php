@@ -2,6 +2,7 @@
 
 namespace App\Infrastructure\Common\Service;
 
+use App\Domain\Common\Exception\Base64MimeTypeNotAllowedException;
 use App\Domain\Common\Exception\InvalidBase64FormatException;
 use App\Domain\Common\Service\Base64ImageUploaderInterface;
 use App\Domain\Common\Service\Base64ToMimeTypeConverterInterface;
@@ -10,6 +11,7 @@ use App\Domain\Common\Service\UuidGeneratorInterface;
 
 class FileSystemBase64ImageUploader implements Base64ImageUploaderInterface
 {
+    private const ALLOWED_MIME_TYPE_TYPE = 'image';
     private $projectPath;
     private $imagesRelativePath;
     private $base64ToMimeTypeConverter;
@@ -31,11 +33,19 @@ class FileSystemBase64ImageUploader implements Base64ImageUploaderInterface
     public function upload(string $base64): string
     {
         $mimeType = $this->base64ToMimeTypeConverter->convert($base64);
+        $this->validateMimeType($mimeType);
         $imageData = $this->getImageDataFromBase64($base64);
         $imagePath = $this->createImageAbsolutePath($mimeType, $imageData);
         file_put_contents($imagePath, $imageData);
 
         return $imagePath;
+    }
+
+    private function validateMimeType(MimeType $mimeType): void
+    {
+        if ($mimeType->type() !== self::ALLOWED_MIME_TYPE_TYPE) {
+            throw new Base64MimeTypeNotAllowedException('Mime type of base64 file is not \'image/x\'');
+        }
     }
 
     private function getImageDataFromBase64(string $base64): string
