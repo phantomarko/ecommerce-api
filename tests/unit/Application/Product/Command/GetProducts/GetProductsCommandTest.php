@@ -7,18 +7,35 @@ use PHPUnit\Framework\TestCase;
 
 class GetProductsCommandTest extends TestCase
 {
+    private $hostUrl;
     private $page;
     private $itemsPerPage;
 
     public function setUp()
     {
+        $this->hostUrl = 'http://host.example';
         $this->page = 1;
         $this->itemsPerPage = 10;
+    }
+
+    public function testHostUrl()
+    {
+        $command = new GetProductsCommand(
+            $this->hostUrl,
+            $this->page,
+            $this->itemsPerPage,
+            null,
+            null,
+            null,
+            null
+        );
+        $this->assertSame($command->hostUrl(), $this->hostUrl);
     }
 
     public function testPage()
     {
         $command = new GetProductsCommand(
+            $this->hostUrl,
             $this->page,
             $this->itemsPerPage,
             null,
@@ -32,6 +49,7 @@ class GetProductsCommandTest extends TestCase
     public function testItemsPerPage()
     {
         $command = new GetProductsCommand(
+            $this->hostUrl,
             $this->page,
             $this->itemsPerPage,
             null,
@@ -46,6 +64,7 @@ class GetProductsCommandTest extends TestCase
     {
         $taxonomyUuid = 'uuid';
         $command = new GetProductsCommand(
+            $this->hostUrl,
             $this->page,
             $this->itemsPerPage,
             $taxonomyUuid,
@@ -60,6 +79,7 @@ class GetProductsCommandTest extends TestCase
     {
         $minimumPrice = floatval(100);
         $command = new GetProductsCommand(
+            $this->hostUrl,
             $this->page,
             $this->itemsPerPage,
             null,
@@ -74,6 +94,7 @@ class GetProductsCommandTest extends TestCase
     {
         $maximumPrice = floatval(100);
         $command = new GetProductsCommand(
+            $this->hostUrl,
             $this->page,
             $this->itemsPerPage,
             null,
@@ -88,6 +109,7 @@ class GetProductsCommandTest extends TestCase
     {
         $text = 'text';
         $command = new GetProductsCommand(
+            $this->hostUrl,
             $this->page,
             $this->itemsPerPage,
             null,
@@ -101,6 +123,7 @@ class GetProductsCommandTest extends TestCase
     public function testEmptyGetters()
     {
         $command = new GetProductsCommand(
+            $this->hostUrl,
             $this->page,
             $this->itemsPerPage,
             null,

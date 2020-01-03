@@ -16,6 +16,7 @@ class ProductTest extends TestCase
     private $taxonomyName;
     private $taxonomy;
     private $product;
+    private $imageRelativePath;
 
     public function setUp()
     {
@@ -27,6 +28,7 @@ class ProductTest extends TestCase
         $this->taxonomyName = 'taxonomy';
         $this->taxonomy = $this->prophesize(Taxonomy::class);
         $this->taxonomy->name()->willReturn($this->taxonomyName);
+        $this->imageRelativePath = 'path/to/image.ext';
 
         $this->product = new Product(
             $this->uuid,
@@ -34,7 +36,8 @@ class ProductTest extends TestCase
             $this->description,
             $this->price,
             $this->priceWithVat,
-            $this->taxonomy->reveal()
+            $this->taxonomy->reveal(),
+            $this->imageRelativePath
         );
     }
 
@@ -68,6 +71,11 @@ class ProductTest extends TestCase
         $this->assertSame($this->product->taxonomyName(), $this->taxonomyName);
     }
 
+    public function testImageRelativePath()
+    {
+        $this->assertSame($this->product->imagePath(), $this->imageRelativePath);
+    }
+
     public function testEmptyTaxonomyName()
     {
         $product = new Product(
@@ -76,7 +84,8 @@ class ProductTest extends TestCase
             $this->description,
             $this->price,
             $this->priceWithVat,
-            null
+            null,
+            $this->imageRelativePath
         );
         $this->assertEmpty($product->taxonomyName());
     }

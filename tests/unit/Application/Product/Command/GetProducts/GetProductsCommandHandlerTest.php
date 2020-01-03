@@ -22,6 +22,8 @@ class GetProductsCommandHandlerTest extends TestCase
     public function testHandle()
     {
         $command = $this->prophesize(GetProductsCommand::class);
+        $hostUrl = 'url';
+        $command->hostUrl()->willReturn($hostUrl);
 
         $filters = $this->prophesize(ProductFilters::class);
         $commandToProductFiltersConverter = $this->prophesize(GetProductsCommandToProductFiltersConverter::class);
@@ -37,7 +39,7 @@ class GetProductsCommandHandlerTest extends TestCase
         $productToArrayConverter = $this->prophesize(ProductToArrayConverter::class);
 
         $paginatedResultToArrayConverter = $this->prophesize(ProductPaginatedResultToArrayConverter::class);
-        $paginatedResultToArrayConverter->convert($paginatedResult->reveal())->willReturn([
+        $paginatedResultToArrayConverter->convert($paginatedResult->reveal(), $hostUrl)->willReturn([
             'page' => 1,
             'itemsPerPage' => 10,
             'totalItems' => 100,

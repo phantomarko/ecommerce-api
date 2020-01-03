@@ -34,54 +34,54 @@ class ListProductsController extends AbstractController
      *     in="query",
      *     type="integer",
      *     required=true,
-     *     description="The page"
+     *     description="The page."
      * )
      * @SWG\Parameter(
      *     name="itemsPerPage",
      *     in="query",
      *     type="integer",
      *     required=true,
-     *     description="The items per page"
+     *     description="The items per page."
      * )
      * @SWG\Parameter(
      *     name="taxonomyUuid",
      *     in="query",
      *     type="string",
      *     required=false,
-     *     description="The taxonomy uuid"
+     *     description="The taxonomy uuid."
      * )
      * @SWG\Parameter(
      *     name="minimumPrice",
      *     in="query",
      *     type="number",
      *     required=false,
-     *     description="The minimum price"
+     *     description="The minimum price."
      * )
      * @SWG\Parameter(
      *     name="maximumPrice",
      *     in="query",
      *     type="number",
      *     required=false,
-     *     description="The maximum price"
+     *     description="The maximum price."
      * )
      * @SWG\Parameter(
      *     name="text",
      *     in="query",
      *     type="string",
      *     required=false,
-     *     description="The text to look for in the name and description fields"
+     *     description="The text to look for in the name and description fields."
      * )
      * @SWG\Response(
      *     response=200,
-     *     description="Fetch products success"
+     *     description="Fetch products success."
      * )
      * @SWG\Response(
      *     response=400,
-     *     description="Request error"
+     *     description="Request error."
      * )
      * @SWG\Response(
      *     response=500,
-     *     description="Internal server error"
+     *     description="Internal server error."
      * )
      * @SWG\Tag(name="Products")
      */
