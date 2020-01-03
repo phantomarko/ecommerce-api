@@ -40,8 +40,8 @@ class ProductFactoryTest extends TestCase
         $taxonomy = $this->prophesize(Taxonomy::class);
         $taxonomy->name()->willReturn('taxonomy');
         $this->taxonomyRepository->findOneByUuid($taxonomyUuid)->willReturn($taxonomy->reveal());
-        $splFileInfo = $this->prophesize(\SplFileInfo::class);
-        $this->base64ImageUploader->upload($base64Image)->willReturn($splFileInfo->reveal());
+        $imageRelativePath = 'path/to/image.ext';
+        $this->base64ImageUploader->upload($base64Image)->willReturn($imageRelativePath);
         $this->uuidGenerator->generate()->willReturn('uuid');
 
         $productFactory = new ProductFactory(
@@ -107,8 +107,8 @@ class ProductFactoryTest extends TestCase
         $priceWithVat = 121;
         $base64Image = 'base64';
         $this->uuidGenerator->generate()->willReturn('uuid');
-        $splFileInfo = $this->prophesize(\SplFileInfo::class);
-        $this->base64ImageUploader->upload($base64Image)->willReturn($splFileInfo->reveal());
+        $imageRelativePath = 'path/to/image.ext';
+        $this->base64ImageUploader->upload($base64Image)->willReturn($imageRelativePath);
 
         $productFactory = new ProductFactory(
             $this->productRepository->reveal(),
@@ -139,7 +139,6 @@ class ProductFactoryTest extends TestCase
         $name = 'name';
         $description = 'description';
         $price = 100;
-        $priceWithVat = 121;
         $taxonomyUuid = 'uuid';
         $taxonomy = $this->prophesize(Taxonomy::class);
         $taxonomy->name()->willReturn('taxonomy');

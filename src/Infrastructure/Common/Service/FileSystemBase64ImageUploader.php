@@ -10,29 +10,34 @@ use App\Domain\Common\Service\UuidGeneratorInterface;
 
 class FileSystemBase64ImageUploader implements Base64ImageUploaderInterface
 {
-    private $uploadDirectory;
+    private $projectPath;
+    private $uploadsRelativePath;
     private $base64ToMimeTypeConverter;
     private $uuidGenerator;
 
     public function __construct(
-        string $uploadDirectory,
+        string $projectPath,
+        string $uploadsRelativePath,
         Base64ToMimeTypeConverterInterface $base64ToMimeTypeConverter,
         UuidGeneratorInterface $uuidGenerator
     )
     {
-        $this->uploadDirectory = $uploadDirectory;
+        $this->projectPath = $projectPath;
+        $this->uploadsRelativePath = $uploadsRelativePath;
         $this->base64ToMimeTypeConverter = $base64ToMimeTypeConverter;
         $this->uuidGenerator = $uuidGenerator;
     }
 
-    public function upload(string $base64): \SplFileInfo
+    public function upload(string $base64): string
     {
         $mimeType = $this->base64ToMimeTypeConverter->convert($base64);
         $imageData = $this->getImageDataFromBase64($base64);
-        $imagePath = $this->createImageUploadedPath($mimeType, $imageData);
-        file_put_contents($imagePath, $imageData);
+        file_put_contents(
+            $this->createImageAbsolutePath($mimeType, $imageData),
+            $imageData
+        );
 
-        return new \SplFileInfo($imagePath);
+        return $this->createImageRelativePath($mimeType, $imageData);
     }
 
     private function getImageDataFromBase64(string $base64): string
@@ -45,12 +50,21 @@ class FileSystemBase64ImageUploader implements Base64ImageUploaderInterface
         }
     }
 
-    private function createImageUploadedPath(MimeType $mimeType, string $imageData): string
+    private function createImageRelativePath(MimeType $mimeType, string $imageData): string
     {
-        return $this->uploadDirectory
+        return DIRECTORY_SEPARATOR
+            . trim($this->uploadsRelativePath, DIRECTORY_SEPARATOR)
             . DIRECTORY_SEPARATOR
             . $this->uuidGenerator->generate()
             . '.'
             . $mimeType->subtype();
+    }
+
+    private function createImageAbsolutePath(MimeType $mimeType, string $imageData): string
+    {
+        return DIRECTORY_SEPARATOR
+            . trim($this->projectPath, DIRECTORY_SEPARATOR)
+            . DIRECTORY_SEPARATOR
+            . trim($this->createImageRelativePath($mimeType, $imageData), DIRECTORY_SEPARATOR);
     }
 }

@@ -4,5 +4,5 @@ namespace App\Domain\Common\Service;
 
 interface Base64ImageUploaderInterface
 {
-    public function upload(string $base64): \SplFileInfo;
+    public function upload(string $base64): string;
 }

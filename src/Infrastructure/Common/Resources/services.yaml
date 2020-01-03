@@ -1,5 +1,6 @@
 parameters:
-    upload_directory: '%kernel.project_dir%/public/images'
+    project_path: '%kernel.project_dir%'
+    uploads_relative_path: '/public/images'
 services:
     app.ramsey_uuid_generator:
         class: 'App\Infrastructure\Common\Service\RamseyUuidGenerator'
@@ -16,6 +17,7 @@ services:
     app.file_system_base_64_image_uploader:
         class: 'App\Infrastructure\Common\Service\FileSystemBase64ImageUploader'
         arguments:
-            - '%upload_directory%'
+            - '%project_path%'
+            - '%uploads_relative_path%'
             - '@app.file_system_base_64_to_mime_type_converter'
             - '@app.ramsey_uuid_generator'
