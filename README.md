@@ -1,10 +1,10 @@
 E-commerce Symfony API 🎼
 ======
-Symfony 4.4 developed and tested in Homestead environment with PHP 7.3 and Mysql 5.7
+Symfony 4.4 developed and tested in Homestead environment with PHP 7.4 and Mysql 5.7
 
 ## Project Set Up
 ### 1. Prepare the environment
-Configure the project in Homestead, Docker, XAMPP or any web server/virtualization service with PHP 7.3 and MySQL 5.7.
+Configure the project in Homestead, Docker, XAMPP or any web server/virtualization service with PHP 7.4 and MySQL 5.7.
 
 ### 2. Create .env file
 Create a copy of .env as .env.local with your database configuration. Example: 
