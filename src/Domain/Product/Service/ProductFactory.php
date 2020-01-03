@@ -42,14 +42,15 @@ class ProductFactory
         $this->validatePrice($price);
         $taxonomy = $this->getTaxonomyByUuid($taxonomyUuid);
         $uuid = $this->uuidGenerator->generate();
-        $imageUploaded = $this->base64ImageUploader->upload($base64Image);
+        $imageRelativePath = $this->base64ImageUploader->upload($base64Image);
         $product = new Product(
             $uuid,
             $name,
             $description,
             $price,
             $price + ($price * 0.21),
-            $taxonomy
+            $taxonomy,
+            $imageRelativePath
         );
         $this->productRepository->add($product);
 
