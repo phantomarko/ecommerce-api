@@ -32,12 +32,10 @@ class FileSystemBase64ImageUploader implements Base64ImageUploaderInterface
     {
         $mimeType = $this->base64ToMimeTypeConverter->convert($base64);
         $imageData = $this->getImageDataFromBase64($base64);
-        file_put_contents(
-            $this->createImageAbsolutePath($mimeType, $imageData),
-            $imageData
-        );
+        $imagePath = $this->createImageAbsolutePath($mimeType, $imageData);
+        file_put_contents($imagePath, $imageData);
 
-        return $this->createImageRelativePath($mimeType, $imageData);
+        return $imagePath;
     }
 
     private function getImageDataFromBase64(string $base64): string
@@ -50,21 +48,15 @@ class FileSystemBase64ImageUploader implements Base64ImageUploaderInterface
         }
     }
 
-    private function createImageRelativePath(MimeType $mimeType, string $imageData): string
-    {
-        return DIRECTORY_SEPARATOR
-            . trim($this->uploadsRelativePath, DIRECTORY_SEPARATOR)
-            . DIRECTORY_SEPARATOR
-            . $this->uuidGenerator->generate()
-            . '.'
-            . $mimeType->subtype();
-    }
-
     private function createImageAbsolutePath(MimeType $mimeType, string $imageData): string
     {
         return DIRECTORY_SEPARATOR
             . trim($this->projectPath, DIRECTORY_SEPARATOR)
             . DIRECTORY_SEPARATOR
-            . trim($this->createImageRelativePath($mimeType, $imageData), DIRECTORY_SEPARATOR);
+            . trim($this->uploadsRelativePath, DIRECTORY_SEPARATOR)
+            . DIRECTORY_SEPARATOR
+            . $this->uuidGenerator->generate()
+            . '.'
+            . $mimeType->subtype();
     }
 }
