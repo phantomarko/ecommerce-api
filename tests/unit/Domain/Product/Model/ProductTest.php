@@ -73,7 +73,7 @@ class ProductTest extends TestCase
 
     public function testImageRelativePath()
     {
-        $this->assertSame($this->product->imageRelativePath(), $this->imageRelativePath);
+        $this->assertSame($this->product->imagePath(), $this->imageRelativePath);
     }
 
     public function testEmptyTaxonomyName()

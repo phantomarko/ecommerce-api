@@ -19,7 +19,7 @@ App\Domain\Product\Model\Product:
         priceWithVat:
             type: float
             nullable: false
-        imageRelativePath:
+        imagePath:
             type: string
             nullable: false
             options:

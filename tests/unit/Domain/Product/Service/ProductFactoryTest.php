@@ -66,7 +66,7 @@ class ProductFactoryTest extends TestCase
         $this->assertSame($product->price(), floatval($price));
         $this->assertSame($product->priceWithVat(), floatval($priceWithVat));
         $this->assertNotEmpty($product->taxonomyName());
-        $this->assertSame($product->imageRelativePath(), $imageRelativePath);
+        $this->assertSame($product->imagePath(), $imageRelativePath);
     }
 
     public function createProductProvider()
@@ -133,7 +133,7 @@ class ProductFactoryTest extends TestCase
         $this->assertSame($product->price(), floatval($price));
         $this->assertSame($product->priceWithVat(), floatval($priceWithVat));
         $this->assertEmpty($product->taxonomyName());
-        $this->assertSame($product->imageRelativePath(), $imageRelativePath);
+        $this->assertSame($product->imagePath(), $imageRelativePath);
     }
 
     public function testCreateProductThrowsTaxonomyNotFoundException()

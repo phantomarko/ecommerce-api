@@ -23,7 +23,7 @@ class ProductToArrayConverter
             'price' => $product->price(),
             'priceWithVat' => $product->priceWithVat(),
             'taxonomyName' => $product->taxonomyName(),
-            'image' => $this->imageUrlGenerator->generate($hostUrl, $product->imageRelativePath())
+            'image' => $this->imageUrlGenerator->generate($hostUrl, $product->imagePath())
         ];
     }
 }

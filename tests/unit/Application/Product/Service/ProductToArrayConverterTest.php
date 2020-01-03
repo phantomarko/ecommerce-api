@@ -25,7 +25,7 @@ class ProductToArrayConverterTest extends TestCase
         $taxonomyName = 'taxonomy';
         $product->taxonomyName()->willReturn($taxonomyName);
         $imagePath = 'taxonomy';
-        $product->imageRelativePath()->willReturn($imagePath);
+        $product->imagePath()->willReturn($imagePath);
         $hostUrl = 'url';
 
         $imageUrlGenerator = $this->prophesize(ImageUrlGeneratorInterface::class);

@@ -12,7 +12,7 @@ class Product
     private $price;
     private $priceWithVat;
     private $taxonomy;
-    private $imageRelativePath;
+    private $imagePath;
 
     public function __construct(
         string $uuid,
@@ -30,7 +30,7 @@ class Product
         $this->price = $price;
         $this->priceWithVat = $priceWithVat;
         $this->taxonomy = $taxonomy;
-        $this->imageRelativePath = $imageRelativePath;
+        $this->imagePath = $imageRelativePath;
     }
 
     public function uuid(): string
@@ -63,8 +63,8 @@ class Product
         return $this->taxonomy ? $this->taxonomy->name() : null;
     }
 
-    public function imageRelativePath(): string
+    public function imagePath(): string
     {
-        return $this->imageRelativePath;
+        return $this->imagePath;
     }
 }
